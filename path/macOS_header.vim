@@ -20,7 +20,7 @@ let s:osx_frameworks = s:sdk_dir . '/usr/include'
       \ . ',/usr/local/include'
       \ . ',/usr/include'
       \ . ',' . s:toolchains_dir . '/usr/include'
-      \ . ',' . s:toolchains_dir . '/usr/include/c++/v1'
-      \ . ',' . s:toolchains_dir . '/usr/lib/clang/8.0.0/include'
+      \ . ',' . s:toolchains_dir . '/usr/include/c++/4.2.1'
+      \ . ',' . s:toolchains_dir . '/usr/local/opt/llvm/lib/clang/7.0.0/include'
 
 execute 'set path+=' . s:osx_frameworks

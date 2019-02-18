@@ -13,10 +13,10 @@ let s:gopath = expand('$HOME/go') . '/src'
 let s:srcpath = expand('$HOME/Documents/')
 " -------------------------------------------------------------------------------------------------
 " Neovim Configs:
-let g:ruby_host_prog = '/Users/kspark/.rbenv/versions/2.5.3/bin/ruby'
+let g:ruby_host_prog = '/usr/local/opt/ruby/bin/ruby'
 
-let g:python_host_path = '/usr/local/bin/python2'
-let g:python3_host_path = '/usr/local/bin/python3'
+let g:python_host_prog = '/usr/local/bin/python2'
+let g:python3_host_prog = '/usr/local/bin/python3'
 let g:loaded_python_provider = 1
 let g:clipboard = {
       \   'name': 'macOS-clipboard',
@@ -74,7 +74,7 @@ set helplang & helplang=en,ja  " Hey, if true Vim master, use English help langu
 set hidden
 set history=10000
 set ignorecase
-set inccommand=nosplit
+"set inccommand=nosplit
 set laststatus=2
 set linebreak
 set list & listchars=nbsp:%,tab:»-,trail:_
@@ -92,7 +92,7 @@ set previewheight=10
 set pumheight=40
 set regexpengine=2
 set ruler
-set scrollback=-1
+"set scrollback=-1
 set scrolljump=1
 set scrolloff=10
 set secure
@@ -195,8 +195,8 @@ endfor
 " -------------------------------------------------------------------------------------------------
 " Ignore Plugins:
 
-let g:did_install_default_menus = 1 " $VIMRUNTIME/menu.vim
-let g:did_menu_trans            = 1 " $VIMRUNTIME/menu.vim
+"let g:did_install_default_menus = $VIMRUNTIME/menu.vim
+"let g:did_menu_trans            = 1 " $VIMRUNTIME/menu.vim
 let g:load_doxygen_syntax       = 1 " $VIMRUNTIME/syntax/doxygen.vim
 let g:loaded_2html_plugin       = 1 " $VIMRUNTIME/plugin/tohtml.vim
 let g:loaded_gzip               = 1 " $VIMRUNTIME/plugin/gzip.vim
@@ -255,10 +255,15 @@ if dein#load_state(s:dein_cache_dir)
   
   " Dein:
   call dein#add('Shougo/dein.vim')
-  call dein#add('nanotech/jellybeans.vim')
+  call dein#add('dracula/vim')
+  "call dein#add('nanotech/jellybeans.vim')
 
   " Completion Deoplete:
   call dein#add('Shougo/deoplete.nvim')
+  if !has('nvim')
+  call dein#add('roxma/nvim-yarp')
+  call dein#add('roxma/vim-hug-neovim-rpc')
+  endif
   call dein#add('/usr/local/opt/fzf') 
   call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
 " suorces
@@ -338,17 +343,17 @@ if dein#load_state(s:dein_cache_dir)
   call dein#add('tyru/open-browser.vim')
 
   " Lifelog:
-  "call dein#add('wakatime/vim-wakatime')
+"  call dein#add('wakatime/vim-wakatime')
 
   " -------
   " Language Plugin:
 
   "" Go:
-  call dein#add('fatih/vim-go', { 'lazy': 1 })
-  call dein#add('tweekmonster/hl-goimport.vim', { 'on_ft': ['go'] })
-  call dein#add('zchee/vim-go-slide')
-  call dein#add('rhysd/vim-goyacc')
-  call dein#add('garyburd/vigor')
+  "call dein#add('fatih/vim-go', { 'lazy': 1 })
+  "call dein#add('tweekmonster/hl-goimport.vim', { 'on_ft': ['go'] })
+  "call dein#add('zchee/vim-go-slide')
+  "call dein#add('rhysd/vim-goyacc')
+  "call dein#add('garyburd/vigor')
 
   "" C Family:
   call dein#add('vim-jp/vim-cpp')
@@ -374,7 +379,7 @@ if dein#load_state(s:dein_cache_dir)
   call dein#add('ekalinin/Dockerfile.vim')
 
   "" Kubernetes:
-  call dein#add('andrewstuart/vim-kubernetes')
+"  call dein#add('andrewstuart/vim-kubernetes')
   "" Lua:
 
   "" Serializer:
@@ -419,7 +424,7 @@ if dein#load_state(s:dein_cache_dir)
   call dein#add('jparise/vim-graphql')
 
   "" Tmux:
-  call dein#add('tmux-plugins/vim-tmux')
+  "call dein#add('tmux-plugins/vim-tmux')
 
   "" TerraFrom:
   call dein#add('hashivim/vim-terraform')
@@ -432,14 +437,17 @@ if dein#load_state(s:dein_cache_dir)
   call dein#add('vim-scripts/vim-niji', { 'on_ft': ['scheme'] })
 
   "" PlantUML:
-  call dein#add('aklt/plantuml-syntax')
-  call dein#add('scrooloose/vim-slumlord')
+  "call dein#add('aklt/plantuml-syntax')
+  "call dein#add('scrooloose/vim-slumlord')
 
   " Testing Plugin:
   call dein#add('scrooloose/nerdtree')
   call dein#add('zebult/auto-gtags.vim')
-  call dein#add('gilligan/vim-lldb')
+"  call dein#add('gilligan/vim-lldb')
   call dein#add('mileszs/ack.vim')
+  call dein#add('tpope/vim-surround')
+  call dein#add('tpope/vim-markdown')
+  call dein#add('tpope/vim-repeat')
   " call dein#add('xolox/vim-lua-ftplugin', { 'on_ft': ['lua'] })
   " call dein#add('racer-rust/vim-racer')
   " call dein#add('rhysd/rust-doc.vim', { 'on_ft': ['rust'] })
@@ -480,17 +488,17 @@ highlight! TermCursorNC  gui=reverse   guifg=#222222    guibg=#ffffff
 
 "" Go:
 " vim-go-stdlib:
-let g:go_highlight_error = 1
-let g:go_highlight_return = 0
-" #cc6666
-highlight! goStdlibErr        gui=Bold    guifg=#ff005f    guibg=None
-highlight! goString           gui=None    guifg=#92999f    guibg=None
-highlight! goComment          gui=None    guifg=#838c93    guibg=None
-highlight! goField            gui=Bold    guifg=#a1cbc5    guibg=None
-highlight! link               goStdlib          Statement
-highlight! link               goStdlibReturn    PreProc
-highlight! link               goImportedPkg     Statement
-highlight! link               goFormatSpecifier PreProc
+"let g:go_highlight_error = 1
+"let g:go_highlight_return = 0
+"" #cc6666
+"highlight! goStdlibErr        gui=Bold    guifg=#ff005f    guibg=None
+"highlight! goString           gui=None    guifg=#92999f    guibg=None
+"highlight! goComment          gui=None    guifg=#838c93    guibg=None
+"highlight! goField            gui=Bold    guifg=#a1cbc5    guibg=None
+"highlight! link               goStdlib          Statement
+"highlight! link               goStdlibReturn    PreProc
+"highlight! link               goImportedPkg     Statement
+"highlight! link               goFormatSpecifier PreProc
 
 "" Python:
 highlight! pythonSpaceError   gui=None    guifg=#787f86    guibg=#787f86
@@ -508,9 +516,9 @@ let g:c_no_curly_error = 1
 let g:c_no_tab_space_error = 1
 let g:c_no_trail_space_error = 1
 let g:c_syntax_for_h = 0
-highlight! cCustomFunc  gui=Bold    guifg=#f0c674    guibg=None
-highlight! cErr         gui=Bold    guifg=#ff005f    guibg=None
-
+"highlight! cCustomFunc  gui=Bold    guifg=#f0c674    guibg=None
+"highlight! cErr         gui=Bold    guifg=#ff005f    guibg=None
+"
 " CPP:
 let g:cpp_class_scope_highlight = 1
 let g:cpp_experimental_template_highlight = 1
@@ -526,8 +534,8 @@ highlight! DenitePreviewLine guifg=#85678f
 highlight! DeniteUnderlined guifg=#85678f
 
 "" ParenMatch:
-highlight! ParenMatch    gui=underline guifg=none       guibg=#343941
-
+"highlight! ParenMatch    gui=underline guifg=none       guibg=#343941
+"
 " -------------------------------------------------------------------------------------------------
 " Initialize Syntax:
 
@@ -562,7 +570,7 @@ Gautocmd BufNewFile,BufReadPost
       \ /System/Library/*,/Applications/Xcode*,/usr/include*,/usr/lib*
       \ setlocal readonly nomodified
 
-Gautocmdft godoc,help,man,qf,quickrun,ref call LessMap()  " less like keymappnig
+Gautocmdft help,man,qf,quickrun,ref call LessMap()  " less like keymappnig
 Gautocmd BufEnter option-window call LessMap()  " :option have not filetype
 Gautocmd BufEnter __LanguageClient__ call LessMap()
 
@@ -584,8 +592,8 @@ function! s:nvim_terminal_config()
     let s:num += 1
   endfor
 endfunction
-Gautocmd TermOpen * call s:nvim_terminal_config()
-Gautocmd TermOpen * setlocal nonumber sidescrolloff=0 scrolloff=0 statusline=%{b:term_title}
+"Gautocmd TermOpen * call s:nvim_terminal_config()
+"Gautocmd TermOpen * setlocal nonumber sidescrolloff=0 scrolloff=0 statusline=%{b:term_title}
 Gautocmd BufNewFile,BufRead,BufEnter term://* startinsert
 Gautocmd BufLeave term://* stopinsert
 
@@ -645,90 +653,90 @@ Gautocmd QuickFixCmdPost *grep* cwindow
 
 " Go:
 "" Nvim Go:
-let g:go#build#appengine = 0
-let g:go#build#autosave = 1
-let g:go#build#is_not_gb = 0
-let go#highlight#cgo = 1
-" let g:go#build#flags = ['-race']
-let g:go#build#force = 0
-let g:go#fmt#autosave  = 1
-let g:go#fmt#mode = 'goimports'
-let g:go#guru#keep_cursor = {
-      \ 'callees'    : 0,
-      \ 'callers'    : 0,
-      \ 'callstack'  : 0,
-      \ 'definition' : 1,
-      \ 'describe'   : 0,
-      \ 'freevars'   : 0,
-      \ 'implements' : 0,
-      \ 'peers'      : 0,
-      \ 'pointsto'   : 0,
-      \ 'referrers'  : 0,
-      \ 'whicherrs'  : 0
-      \ }
-let g:go#generate#test#subtest = 1
-let g:go#guru#reflection = 0
-let g:go#iferr#autosave = 0
-let g:go#lint#golint#autosave = 0
-let g:go#lint#golint#ignore = ['internal', 'vendor', 'pb', 'fbs']
-let g:go#lint#golint#mode = 'root'
-let g:go#lint#govet#autosave = 0
-let g:go#lint#govet#flags = ['-v', '-all']
-let g:go#lint#govet#ignore = ['vendor', 'testdata', '_tmp']
-let g:go#lint#metalinter#autosave = 0
-let g:go#lint#metalinter#autosave#tools = ['vet', 'golint']
-let g:go#lint#metalinter#deadline = '20s'
-let g:go#lint#metalinter#skip_dir = ['internal', 'vendor', 'testdata', '__*.go', '*_test.go']
-let g:go#lint#metalinter#tools = ['vet', 'golint']
-let g:go#rename#prefill = 1
-let g:go#snippets#loaded = 1
-let g:go#terminal#height = 120
-let g:go#terminal#start_insert = 1
-let g:go#terminal#width = 120
-let g:go#test#all_package = 0
-let g:go#test#autosave = 0
-let g:go#test#flags = ['-v']
-let g:go#debug = 1
-let g:go#debug#pprof = 0
-""" highlight
-let g:go#highlight#terminal#test = 1
-
-
-"" Vim Go:
-" let g:go#use_vimproc = 1
-" let g:go_asmfmt_autosave = 1
-" let g:go_auto_type_info = 0
-" let g:go_autodetect_gopath = 1
-" let g:go_def_mapping_enabled = 0
-" let g:go_def_mode = 'godef'
-" let g:go_doc_command = 'godoc'
-" let g:go_doc_options = ''
-" let g:go_fmt_autosave = 1
-" let g:go_fmt_command = 'goimports'
-" let g:go_fmt_experimental = 1
-" let g:go_loclist_height = 15
-" let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck', 'gotype']
-" let g:go_snippet_engine = 'neosnippet' " ultisnips
-" let g:go_template_enabled = 0
-" let g:go_term_enabled = 1
-" let g:go_term_height = 30
-" let g:go_term_width = 30
-let g:go_doc_max_height = 30
-let g:go_highlight_array_whitespace_error = 0    " default : 1
-let g:go_highlight_build_constraints = 1
-let g:go_highlight_chan_whitespace_error = 0     " default : 1
-let g:go_highlight_extra_types = 1
-let g:go_highlight_fields = 0                    " default : 0
-let g:go_highlight_format_strings = 1
-let g:go_highlight_functions = 1                 " default : 0
-let g:go_highlight_generate_tags = 1             " default : 0
-let g:go_highlight_interfaces = 1                " default : 0
-let g:go_highlight_methods = 1                   " default : 0
-let g:go_highlight_operators = 1                 " default : 0
-let g:go_highlight_space_tab_error = 0           " default : 1
-let g:go_highlight_string_spellcheck = 0         " default : 1
-let g:go_highlight_structs = 1                   " default : 0
-let g:go_highlight_trailing_whitespace_error = 0 " default : 1
+"let g:go#build#appengine = 0
+"let g:go#build#autosave = 1
+"let g:go#build#is_not_gb = 0
+"let go#highlight#cgo = 1
+"" let g:go#build#flags = ['-race']
+"let g:go#build#force = 0
+"let g:go#fmt#autosave  = 1
+"let g:go#fmt#mode = 'goimports'
+"let g:go#guru#keep_cursor = {
+"      \ 'callees'    : 0,
+"      \ 'callers'    : 0,
+"      \ 'callstack'  : 0,
+"      \ 'definition' : 1,
+"      \ 'describe'   : 0,
+"      \ 'freevars'   : 0,
+"      \ 'implements' : 0,
+"      \ 'peers'      : 0,
+"      \ 'pointsto'   : 0,
+"      \ 'referrers'  : 0,
+"      \ 'whicherrs'  : 0
+"      \ }
+"let g:go#generate#test#subtest = 1
+"let g:go#guru#reflection = 0
+"let g:go#iferr#autosave = 0
+"let g:go#lint#golint#autosave = 0
+"let g:go#lint#golint#ignore = ['internal', 'vendor', 'pb', 'fbs']
+"let g:go#lint#golint#mode = 'root'
+"let g:go#lint#govet#autosave = 0
+"let g:go#lint#govet#flags = ['-v', '-all']
+"let g:go#lint#govet#ignore = ['vendor', 'testdata', '_tmp']
+"let g:go#lint#metalinter#autosave = 0
+"let g:go#lint#metalinter#autosave#tools = ['vet', 'golint']
+"let g:go#lint#metalinter#deadline = '20s'
+"let g:go#lint#metalinter#skip_dir = ['internal', 'vendor', 'testdata', '__*.go', '*_test.go']
+"let g:go#lint#metalinter#tools = ['vet', 'golint']
+"let g:go#rename#prefill = 1
+"let g:go#snippets#loaded = 1
+"let g:go#terminal#height = 120
+"let g:go#terminal#start_insert = 1
+"let g:go#terminal#width = 120
+"let g:go#test#all_package = 0
+"let g:go#test#autosave = 0
+"let g:go#test#flags = ['-v']
+"let g:go#debug = 1
+"let g:go#debug#pprof = 0
+"""" highlight
+"let g:go#highlight#terminal#test = 1
+"
+"
+""" Vim Go:
+"" let g:go#use_vimproc = 1
+"" let g:go_asmfmt_autosave = 1
+"" let g:go_auto_type_info = 0
+"" let g:go_autodetect_gopath = 1
+"" let g:go_def_mapping_enabled = 0
+"" let g:go_def_mode = 'godef'
+"" let g:go_doc_command = 'godoc'
+"" let g:go_doc_options = ''
+"" let g:go_fmt_autosave = 1
+"" let g:go_fmt_command = 'goimports'
+"" let g:go_fmt_experimental = 1
+"" let g:go_loclist_height = 15
+"" let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck', 'gotype']
+"" let g:go_snippet_engine = 'neosnippet' " ultisnips
+"" let g:go_template_enabled = 0
+"" let g:go_term_enabled = 1
+"" let g:go_term_height = 30
+"" let g:go_term_width = 30
+"let g:go_doc_max_height = 30
+"let g:go_highlight_array_whitespace_error = 0    " default : 1
+"let g:go_highlight_build_constraints = 1
+"let g:go_highlight_chan_whitespace_error = 0     " default : 1
+"let g:go_highlight_extra_types = 1
+"let g:go_highlight_fields = 0                    " default : 0
+"let g:go_highlight_format_strings = 1
+"let g:go_highlight_functions = 1                 " default : 0
+"let g:go_highlight_generate_tags = 1             " default : 0
+"let g:go_highlight_interfaces = 1                " default : 0
+"let g:go_highlight_methods = 1                   " default : 0
+"let g:go_highlight_operators = 1                 " default : 0
+"let g:go_highlight_space_tab_error = 0           " default : 1
+"let g:go_highlight_string_spellcheck = 0         " default : 1
+"let g:go_highlight_structs = 1                   " default : 0
+"let g:go_highlight_trailing_whitespace_error = 0 " default : 1
 
 
 " C CXX:
@@ -845,25 +853,25 @@ let s:deoplete_custom_option = {
 " LLVM library path
 if isdirectory("/usr/local/opt/llvm/lib")
   let s:llvm_library_path = '/usr/local/opt/llvm/lib'
-  let s:llvm_clang_version = '7.0.0'
+  let s:llvm_clang_version = '7.0.1'
 else
   let s:llvm_library_path = '/Library/Developer/CommandLineTools/usr/lib'
   let s:llvm_clang_version = '10.0.0'
 endif
-"" go
-let s:use_gocode_mdempsky = 0
-let g:deoplete#sources#go#gocode_binary = expand('$HOME/go/bin/gocode')
-let g:deoplete#sources#go#gocode_flags = []
-if s:use_gocode_mdempsky != 0
-  let g:deoplete#sources#go#gocode_binary = expand('$HOME/go/bin/gocode-mdempsky')
-  let g:deoplete#sources#go#gocode_flags = ['-builtin', '-sock=none', '-source']
-endif
-let g:deoplete#sources#go#auto_goos = 1
-let g:deoplete#sources#go#pointer = 1
-let g:deoplete#sources#go#sort_class = ['func', 'type', 'var', 'const', 'package']
-let g:deoplete#sources#go#cgo = 1
-let g:deoplete#sources#go#cgo#libclang_path = s:llvm_library_path . '/libclang.dylib'
-let g:deoplete#sources#go#cgo#sort_algo = 'priority'  " 'alphabetical'
+""" go
+"let s:use_gocode_mdempsky = 0
+"let g:deoplete#sources#go#gocode_binary = expand('$HOME/go/bin/gocode')
+"let g:deoplete#sources#go#gocode_flags = []
+"if s:use_gocode_mdempsky != 0
+"  let g:deoplete#sources#go#gocode_binary = expand('$HOME/go/bin/gocode-mdempsky')
+"  let g:deoplete#sources#go#gocode_flags = ['-builtin', '-sock=none', '-source']
+"endif
+"let g:deoplete#sources#go#auto_goos = 1
+"let g:deoplete#sources#go#pointer = 1
+"let g:deoplete#sources#go#sort_class = ['func', 'type', 'var', 'const', 'package']
+"let g:deoplete#sources#go#cgo = 1
+"let g:deoplete#sources#go#cgo#libclang_path = s:llvm_library_path . '/libclang.dylib'
+"let g:deoplete#sources#go#cgo#sort_algo = 'priority'  " 'alphabetical'
 "" clang
 let g:deoplete#sources#clang#clang_header = s:llvm_library_path . '/clang'
 let g:deoplete#sources#clang#flags = [
@@ -928,7 +936,7 @@ let g:LanguageClient_serverCommands_c = [
       \ '-j=10',
       \ '-limit-results=0',
       \ '-pch-storage=memory',  
-      \ '-resource-dir=/usr/local/opt/llvm/lib/clang/7.0.0',
+      \ '-resource-dir=/usr/local/opt/llvm/lib/clang/7.0.1',
       \ '-use-dbg-addr'
       \ ]
 let g:LanguageClient_serverCommands = {
@@ -940,7 +948,7 @@ let g:LanguageClient_serverCommands = {
       \ 'graphql': ['graphql', 'autocomplete'],
       \ 'sh': ['bash-language-server', 'start'],
       \ 'typescript': ['javascript-typescript-stdio'],
-      \ 'x': ['/usr/local/bin/cquery', '--log-file=/tmp/cq.log', '--init={"index":{"comments":2},"cacheFormat":"msgpack","cacheDirectory":"/Users/kspark/.cache/cquery","resourceDirectory":"/usr/local/opt/llvm/lib/clang/7.0.0"}'],
+      \ 'x': ['/usr/local/bin/cquery', '--log-file=/tmp/cq.log', '--init={"index":{"comments":2},"cacheFormat":"msgpack","cacheDirectory":"/Users/kspark/.cache/cquery","resourceDirectory":"/usr/local/opt/llvm/lib/clang/7.0.1"}'],
       \ 'zsh': ['bash-language-server', 'start'],
       \ }
 let s:LanguageClient_rootMarkers_c = ['autogen.sh', 'configure', '.clang-format']
@@ -1160,7 +1168,7 @@ let g:cursorword = 0
 
 
 " Wakatime:
-let g:wakatime_PythonBinary = '/usr/local/opt/python3/bin/python3'
+let g:wakatime_PythonBinary = '/usr/local/bin/python3'
 
 
 " SonicTemplate:
@@ -1893,6 +1901,6 @@ tnoremap <nowait><buffer><BS>    <BS>
 
 " -------------------------------------------------------------------------------------------------
 "let $NVIM_TUI_ENABLE_TRUE_COLOR=1
-colorscheme jellybeans 
+colorscheme dracula 
 
 

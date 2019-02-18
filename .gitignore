@@ -84,3 +84,7 @@ shada/
 undo/
 
 test/vint
+tmp/
+
+#mac
+.DS_Store
