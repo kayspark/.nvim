@@ -149,7 +149,7 @@ set nowrapscan
 set nowritebackup
 
 
-set guifont=Source\ Code\ Pro\ \for\ Powerline:h14
+set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h14
 set termguicolors
 set background=dark
 if has ("gui_running")
