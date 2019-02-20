@@ -70,7 +70,7 @@ set formatoptions+=n  " Recognize numbered lists
 set formatoptions+=q  " Allow formatting of comments with "gq".
 set formatoptions+=r  " Insert comment leader after hitting <Enter>
 set formatoptions+=t  " Auto-wrap text using textwidth
-set helplang & helplang=en,ja  " Hey, if true Vim master, use English help language.
+set helplang & helplang=en,ko  " Hey, if true Vim master, use English help language.
 set hidden
 set history=10000
 set ignorecase
