@@ -47,7 +47,7 @@ set backup
 set backupdir=$XDG_DATA_HOME/nvim/backup
 set belloff=all
 set cinoptions+=:0,g0,N-1,m1
-set clipboard=unnamed,unnamedplus
+set clipboard^=unnamed,unnamedplus
 set cmdheight=2
 set complete=.  " default: .,w,b,u,t
 set completeopt=menuone,noinsert,noselect  " longest
@@ -274,7 +274,7 @@ if dein#load_state(s:dein_cache_dir)
   " call dein#local(s:srcpath.'/zchee', { 'frozen': 1, 'merged': 0, 'on_ft': ['gas', 'masm'] }, ['deoplete-asm'])
   " call dein#local(s:srcpath.'/zchee', { 'frozen': 1, 'merged': 0, 'on_ft': ['zsh'] }, ['deoplete-zsh'])
   call dein#add('Shougo/neco-vim', { 'on_ft': ['vim'] })
-  "call dein#add('LuXuryPro/deoplete-rtags', { 'on_ft': ['c', 'cpp', 'objc', 'objcpp'] })
+  call dein#add('LuXuryPro/deoplete-rtags', { 'on_ft': ['c', 'cpp', 'objc', 'objcpp'] })
   call dein#add('Shougo/neosnippet-snippets')
   call dein#add('Shougo/neosnippet.vim', { 'depends': ['neosnippet-snippets'] })
   "" support
@@ -313,6 +313,11 @@ if dein#load_state(s:dein_cache_dir)
   " Formatter:
   call dein#add('rhysd/vim-clang-format', { 'on_ft': ['c', 'cpp', 'objc', 'objcpp', 'proto', 'javascript', 'java', 'typescript'] })
 
+  let g:clang_format#code_style='llvm'
+  let g:clang_format#detect_style_file=1
+  let g:clang_format#enable_fallback_style=1
+  let g:clang_format#auto_format_on_insert_leave=1
+  "
   " References:
 
   " Interface:
@@ -610,10 +615,10 @@ if dein#tap('LanguageClient-neovim')
   " languageclient : key mapping:
  nnoremap  <silent>gm          :<C-u>call LanguageClient_contextMenuItems()<CR>
  nnoremap  <silent>gx          :<C-u>call LanguageClient_textDocument_codeAction()<CR>
- nnoremap  <silent>gr          :<C-u>call LanguageClient_textDocument_references()<CR>
+ nnoremap  <silent>gf          :<C-u>call LanguageClient_textDocument_references()<CR>
  nnoremap  <silent>gd          :<C-u>call LanguageClient_textDocument_definition()<CR>
  nnoremap  <silent>gi          :<C-u>call LanguageClient_textDocument_implementation()<CR>
- nnoremap  <silent>gw          :<C-u>call LanguageClient_textDocument_rename()<CR>
+ nnoremap  <silent>gn          :<C-u>call LanguageClient_textDocument_rename()<CR>
  nnoremap  <silent>gh          :<C-u>call LanguageClient_textDocument_hover()<CR>
  nnoremap  <silent>gl          :<C-u>call LanguageClient_textDocument_documentHighlight()<CR>
  nnoremap  <silent>gc          :<C-u>call LanguageClient_clearDocumentHighlight()<CR>
@@ -824,8 +829,8 @@ let s:deoplete_custom_option = {
       \ 'ignore_case': v:true,
       \ 'ignore_sources': {
       \   '_': ['around', 'dictionary', 'omni', 'tag'],
-      \   'c': ['around', 'dictionary', 'omni', 'tag', 'buffer', 'member', 'neosnippet'],
-      \   'cpp': ['around', 'dictionary', 'omni', 'tag', 'buffer', 'member', 'neosnippet'],
+      \   'c': ['around', 'dictionary', 'omni', 'tag', 'buffer', 'member' ],
+      \   'cpp': ['around', 'dictionary', 'omni', 'tag', 'buffer', 'member'],
       \   'go': ['around', 'dictionary', 'omni', 'tag', 'buffer', 'member', 'LanguageClient'],
       \   'python': ['around', 'dictionary', 'omni', 'tag', 'member', 'LanguageClient'],
       \   'sh': ['around', 'dictionary', 'omni', 'tag'],
@@ -925,20 +930,7 @@ let g:LanguageClient_loadSettings = 1
 let g:LanguageClient_selectionUI = 'fzf'  " fzf, quickfix, location-list
 let g:LanguageClient_settingsPath = '.lsp.json'
 let g:LanguageClient_windowLogMessageLevel = "Warning"  " Error, default: Warning, Info, Log
-let g:LanguageClient_serverCommands_c = [
-      \ 'clangd',
-      \ '-compile-commands-dir=build',
-      \ '-compile_args_from=filesystem',
-      \ '-completion-style=detailed',
-      \ '-header-insertion-decorators',
-      \ '-include-ineligible-results',
-      \ '-index',
-      \ '-j=10',
-      \ '-limit-results=0',
-      \ '-pch-storage=memory',  
-      \ '-resource-dir=/usr/local/opt/llvm/lib/clang/7.0.1',
-      \ '-use-dbg-addr'
-      \ ]
+let g:LanguageClient_serverCommands_c = ['/usr/local/bin/cquery', '--log-file=/tmp/cq.log', '--init={"index":{"comments":2},"cacheFormat":"msgpack","cacheDirectory":"/Users/kspark/.cache/cquery","resourceDirectory":"/usr/local/opt/llvm/lib/clang/7.0.1"}']
 let g:LanguageClient_serverCommands = {
       \ 'c': g:LanguageClient_serverCommands_c,
       \ 'cpp': g:LanguageClient_serverCommands_c,
@@ -1070,6 +1062,7 @@ let g:ale_sign_column_always = 1
 "" linters
 let g:ale_linters = {}
 let g:ale_linters.dockerfile = ['hadolint']
+let g:ale_linters.cpp = ['cppcheck']
 let g:ale_linters.go = []  " let g:ale_linters.go = ['gofmt', 'goimports', 'go vet', 'golint', 'gometalinter']
 let g:ale_linters.proto = ['prototool']
 let g:ale_linters.python = ['flake8', 'mypy', 'pylint']
@@ -1828,6 +1821,8 @@ inoremap <silent><expr><C-l>    pumvisible() ? deoplete#mappings#refresh() : "\<
 inoremap <silent><expr><C-z>    deoplete#mappings#undo_completion()
 " Neosnippet:
 imap <expr><C-k> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : ""
+smap <expr><C-k> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : ""
+xmap <expr><C-k> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : ""
 
 " -------------------------------------------------------------------------------------------------
 " Visual Select: (v)
@@ -1900,7 +1895,10 @@ tnoremap <C-Right>       <C-[>f
 tnoremap <nowait><buffer><BS>    <BS>
 
 " -------------------------------------------------------------------------------------------------
-"let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+
 colorscheme dracula 
+if has ('nvim')
+ let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+endif
 
 
