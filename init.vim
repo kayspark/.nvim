@@ -369,6 +369,8 @@ if dein#load_state(s:dein_cache_dir)
   call dein#add('keith/swift.vim')
   "" CMake:
   call dein#add('pboettch/vim-cmake-syntax')
+  call dein#add('vhdirk/vim-cmake')
+
   "" LLVM TableGen:
   call dein#local($HOME.'/src/', { 'frozen': 1, 'merged': 0, 'rtp': 'utils/vim' }, ['llvm-mirror.org/llvm'])
   "" Python:
@@ -932,7 +934,7 @@ let g:LanguageClient_settingsPath = '.lsp.json'
 let g:LanguageClient_windowLogMessageLevel = "Warning"  " Error, default: Warning, Info, Log
 let g:LanguageClient_serverCommands_c = ['/usr/local/bin/cquery', '--log-file=/tmp/cq.log', '--init={"index":{"comments":2},"cacheFormat":"msgpack","cacheDirectory":"/Users/kspark/.cache/cquery","resourceDirectory":"/usr/local/opt/llvm/lib/clang/7.0.1"}']
 let g:LanguageClient_serverCommands = {
-      \ 'c': g:LanguageClient_serverCommands_c,
+       \ 'c': g:LanguageClient_serverCommands_c,
       \ 'cpp': g:LanguageClient_serverCommands_c,
       \ 'objc': g:LanguageClient_serverCommands_c,
       \ 'swift': ['langserver-swift'],
@@ -1056,13 +1058,16 @@ let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_list_window_size = 10
 let g:ale_open_list = 1
-let g:ale_set_loclist = 1
-let g:ale_set_quickfix = 0
+let g:ale_set_loclist = 0
+let g:ale_set_quickfix = 1
 let g:ale_sign_column_always = 1
+
 "" linters
 let g:ale_linters = {}
 let g:ale_linters.dockerfile = ['hadolint']
-let g:ale_linters.cpp = ['cppcheck']
+let g:ale_linters.cpp = ['cppcheck','clangtidy','clazy']
+let g:ale_cpp_clangtidy_options = '-Wall -std=c++17 -x c++'
+let g:ale_cpp_clangtidy_checks = ['*,-android-*,-bugprone-bool-pointer-implicit-conversion,-bugprone-exception-escape,-cert-env33-c,-cert-dcl50-cpp,-cert-dcl59-cpp,-cppcoreguidelines-no-malloc,-cppcoreguidelines-owning-memory,-cppcoreguidelines-pro-bounds-array-to-pointer-decay,-cppcoreguidelines-pro-bounds-constant-array-index,-cppcoreguidelines-pro-bounds-pointer-arithmetic,-cppcoreguidelines-pro-type-const-cast,-cppcoreguidelines-pro-type-cstyle-cast,-cppcoreguidelines-pro-type-reinterpret-cast,-cppcoreguidelines-pro-type-union-access,-cppcoreguidelines-pro-type-vararg,-cppcoreguidelines-special-member-functions,-fuchsia-*,-google-*,google-default-arguments,google-explicit-constructor,google-runtime-member-string-references,google-runtime-operator,-hicpp-braces-around-statements,-hicpp-named-parameter,-hicpp-no-array-decay,-hicpp-no-assembler,-hicpp-no-malloc,-hicpp-function-size,-hicpp-special-member-functions,-hicpp-vararg,-llvm-*,-objc-*,-readability-else-after-return,-readability-implicit-bool-conversion,-readability-named-parameter,-readability-simplify-boolean-expr,-readability-braces-around-statements,-readability-identifier-naming,-readability-function-size,-readability-redundant-member-init,-misc-bool-pointer-implicit-conversion,-misc-definitions-in-headers,-misc-unused-alias-decls,-misc-unused-parameters,-misc-unused-using-decls,-modernize-*,-clang-diagnostic-*,-clang-analyzer-*']
 let g:ale_linters.go = []  " let g:ale_linters.go = ['gofmt', 'goimports', 'go vet', 'golint', 'gometalinter']
 let g:ale_linters.proto = ['prototool']
 let g:ale_linters.python = ['flake8', 'mypy', 'pylint']
@@ -1074,6 +1079,7 @@ let g:ale_linters.zsh = ['sh-language-server']
 let g:ale_fixers = {}
 let g:ale_fixers.sh = ['remove_trailing_lines', 'trim_whitespace']
 let g:ale_fixers.zsh = ['remove_trailing_lines', 'trim_whitespace']
+let g:ale_fixers = {'javascript': ['prettier', 'eslint']}
 "" Go:
 let g:ale_go_gofmt_options = '-s'
 let g:ale_go_gometalinter_options = '--fast --enable=staticcheck --enable=gosimple --enable=unused'
@@ -1085,6 +1091,8 @@ let g:ale_sh_shellcheck_executable = '/usr/local/bin/shellcheck'
 let g:ale_sh_shellcheck_options = '-x -s bash'
 let g:ale_sh_shfmt_options = ''
 
+nmap <silent> <C-k> <Plug>(ale_previous_wrap)
+nmap <silent> <C-j> <Plug>(ale_next_wrap)
 
 " Caw:
 let g:caw_hatpos_skip_blank_line = 0
@@ -1293,8 +1301,8 @@ function! s:build_quickfix_list(lines)
   cc
 endfunction
 "key bindings for fzf
-nmap ; :Buffers<CR>
-nmap <Leader>p :Files<CR>
+nmap <Leader>b :Buffers<CR>
+nmap <Leader>f :Files<CR>
 nmap <Leader>r :Tags<CR>>
 
 let g:fzf_action = {
@@ -1657,13 +1665,13 @@ nnoremap <silent><LocalLeader>q         :<C-u>q<CR>
 nnoremap <silent><LocalLeader>w         :<C-u>w<CR>
 
 "" ,
-nnoremap              <silent>,m        <C-w>W
-nnoremap              <silent>,n        <C-w>w
-nnoremap              <silent>,p        <C-w>W
-nnoremap              <silent>,r        <C-w>x
-nnoremap              <silent>,s        :<C-u>bNext<CR>
-nnoremap              <silent>,t        :<C-u>tabnew<CR>
-nnoremap              <silent>,w        <C-w>w
+"nnoremap              <silent>,m        <C-w>W
+"nnoremap              <silent>,n        <C-w>w
+"nnoremap              <silent>,p        <C-w>W
+"nnoremap              <silent>,r        <C-w>x
+"nnoremap              <silent>,s        :<C-u>bNext<CR>
+"nnoremap              <silent>,t        :<C-u>tabnew<CR>
+"nnoremap              <silent>,w        <C-w>w
 
 " -------------------------------------------------------------------------------------------------
 " Map: (m)
@@ -1767,13 +1775,13 @@ Gautocmdft rust nmap <buffer>K        <Plug>(rust-doc)
 
 "" Protobuf:
 if dein#tap('prototool')
-  Gautocmdft proto nnoremap <silent><Leader>f   :<C-u>call PrototoolFormatToggle()<CR>
+  Gautocmdft proto nnoremap <silent><Leader>fo   :<C-u>call PrototoolFormatToggle()<CR>
 endif
 
 "" Yaml:
 
 "" Markdown:
-Gautocmdft markdown nmap <silent><LocalLeader>f  :<C-u>call markdownfmt#Format()<CR>
+Gautocmdft markdown nmap <silent><LocalLeader>fo  :<C-u>call markdownfmt#Format()<CR>
 
 "" Vim:
 " http://ku.ido.nu/post/90355094974/how-to-grep-a-word-under-the-cursor-on-vim
@@ -1819,6 +1827,7 @@ inoremap <silent><expr><Left>   pumvisible() ? deoplete#mappings#cancel_popup().
 inoremap <silent><expr><Right>  pumvisible() ? deoplete#mappings#cancel_popup()."\<Right>" : "\<Right>"
 inoremap <silent><expr><C-l>    pumvisible() ? deoplete#mappings#refresh() : "\<C-l>"
 inoremap <silent><expr><C-z>    deoplete#mappings#undo_completion()
+"
 " Neosnippet:
 imap <expr><C-k> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : ""
 smap <expr><C-k> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : ""
@@ -1865,10 +1874,6 @@ xnoremap <silent><C-t>     :<C-u>Trans<CR>
 " Gautocmdft go xnoremap <buffer> '  "
 
 " -------------------------------------------------------------------------------------------------
-" Select: (s)
-
-" neosnippet
-smap <expr><C-k> neosnippet#expandable_or_jumpable() ? "\<Plug>(neosnippet_expand_or_jump)" : ""
 
 " Language:
 "" Go:
