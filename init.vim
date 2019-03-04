@@ -84,6 +84,12 @@ set maxmempattern=1000  " max: 2000000
 set modeline
 set modelines=5
 set mouse=a
+if !has('nvim')
+  set ttymouse=xterm2
+  set balloondelay=250
+  set ballooneval
+  set balloonevalterm
+endif
 set noswapfile
 set number
 set packpath=
@@ -243,7 +249,7 @@ if s:dein_dir != '' || &runtimepath !~ '/dein.vim'
   execute 'set runtimepath^=' . substitute(fnamemodify(s:dein_dir, ':p') , '/$', '', '')
 endif
 
-let g:dein#install_max_processes = 2
+let g:dein#install_max_processes = 3
 let g:dein#types#git#default_protocol = 'https'
 let g:dein#types#git#clone_depth = 1
 
@@ -266,15 +272,8 @@ if dein#load_state(s:dein_cache_dir)
   endif
   call dein#add('/usr/local/opt/fzf') 
   call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
-" suorces
-  "call dein#local(s:srcpath.'/zchee', { 'frozen': 1, 'merged': 0, 'on_ft': ['go'] }, ['deoplete-go'])
-  "call dein#add('zchee/deoplete-jedi')
-"  call dein#add('zchee/deoplete-clang', {'on_ft': ['c', 'cpp', 'objc', 'objcpp'] })
-  " call dein#local(s:srcpath.'/zchee', { 'frozen': 1, 'merged': 0, 'on_ft': ['dockerfile'] }, ['deoplete-docker'])
-  " call dein#local(s:srcpath.'/zchee', { 'frozen': 1, 'merged': 0, 'on_ft': ['gas', 'masm'] }, ['deoplete-asm'])
-  " call dein#local(s:srcpath.'/zchee', { 'frozen': 1, 'merged': 0, 'on_ft': ['zsh'] }, ['deoplete-zsh'])
   call dein#add('Shougo/neco-vim', { 'on_ft': ['vim'] })
-  call dein#add('LuXuryPro/deoplete-rtags', { 'on_ft': ['c', 'cpp', 'objc', 'objcpp'] })
+"  call dein#add('LuXuryPro/deoplete-rtags', { 'on_ft': ['c', 'cpp', 'objc', 'objcpp'] })
   call dein#add('Shougo/neosnippet-snippets')
   call dein#add('Shougo/neosnippet.vim', { 'depends': ['neosnippet-snippets'] })
   "" support
@@ -289,7 +288,9 @@ if dein#load_state(s:dein_cache_dir)
   "" dependency
   " call dein#local(s:srcpath, { 'frozen': 1, 'merged': 0 }, ['nixprime/cpsm'])  " can't build with pypy3
   "" suorces
-
+   " LLDB and GDB
+  call dein#add('sakhnik/nvim-gdb', { 'rev': 'next', 'build': 'bash install.sh' })
+  "
   " LanguageClient:
   call dein#add('autozimu/LanguageClient-neovim', { 'rev': 'next', 'build': 'bash install.sh' })
 
@@ -339,6 +340,8 @@ if dein#load_state(s:dein_cache_dir)
   call dein#add('haya14busa/vim-asterisk', { 'on_map': ['<Plug>'] })
   call dein#add('itchyny/vim-parenmatch')
   call dein#add('junegunn/vim-easy-align', {'on_map': '<Plug>'})
+  call dein#add('xolox/vim-easytags')
+  call dein#add('xolox/vim-misc')
   call dein#add('mattn/benchvimrc-vim', { 'on_cmd': ['BenchVimrc'] })
   call dein#add('mattn/sonictemplate-vim', { 'on_cmd': ['Template'] })
   call dein#add('rhysd/accelerated-jk', { 'on_map': ['<Plug>'] })
@@ -353,18 +356,11 @@ if dein#load_state(s:dein_cache_dir)
   " -------
   " Language Plugin:
 
-  "" Go:
-  "call dein#add('fatih/vim-go', { 'lazy': 1 })
-  "call dein#add('tweekmonster/hl-goimport.vim', { 'on_ft': ['go'] })
-  "call dein#add('zchee/vim-go-slide')
-  "call dein#add('rhysd/vim-goyacc')
-  "call dein#add('garyburd/vigor')
-
   "" C Family:
-  call dein#add('vim-jp/vim-cpp')
+"  call dein#add('vim-jp/vim-cpp')
   call dein#add('octol/vim-cpp-enhanced-highlight')
   call dein#add('bfrg/vim-cpp-modern')
-  call dein#add('lyuts/vim-rtags', { 'on_ft': ['c', 'cpp', 'objc', 'objcpp'] })
+"  call dein#add('lyuts/vim-rtags', { 'on_ft': ['c', 'cpp', 'objc', 'objcpp'] })
   "" Swift:
   call dein#add('keith/swift.vim')
   "" CMake:
@@ -455,18 +451,8 @@ if dein#load_state(s:dein_cache_dir)
   call dein#add('tpope/vim-surround')
   call dein#add('tpope/vim-markdown')
   call dein#add('tpope/vim-repeat')
-  " call dein#add('xolox/vim-lua-ftplugin', { 'on_ft': ['lua'] })
-  " call dein#add('racer-rust/vim-racer')
-  " call dein#add('rhysd/rust-doc.vim', { 'on_ft': ['rust'] })
-  " call dein#add('b4b4r07/vim-ansible-vault')
-  " call dein#add('rhysd/vim-gfm-syntax', { 'on_ft': ['markdown'] })
-  " call dein#add('juliosueiras/vim-terraform-completion')
-  " call dein#local(s:srcpath, { 'frozen': 1, 'merged': 0, 'on_ft': ['c', 'cpp', 'objc', 'objcpp', 'typescript'] }, ['Valloric/YouCompleteMe'])
-  " call dein#add('b4b4r07/vim-crowi', {'on_cmd': 'CrowiCreate'})
-  " call dein#add('cocopon/pgmnt.vim', { 'on_cmd': ['PgmntDevInspect'] })
-  " call dein#add('sbdchd/neoformat')
-  " call dein#add('leafgarland/typescript-vim')
-  " call dein#add('jsfaint/gen_tags.vim', { 'on_cmd': ['GenCtags', 'EditExt', 'ClearCtags', 'GenGTAGS', 'ClearGTAGS'] })
+call dein#add('tpope/vim-unimpaired')
+  call dein#add('tpope/vim-abolish')
 
   call dein#end()
   call dein#save_state()
@@ -615,23 +601,31 @@ if dein#tap('LanguageClient-neovim')
   Gautocmd User LanguageClientBufReadPost call s:lsp_yaml_set_schema('')
 
   " languageclient : key mapping:
- nnoremap  <silent>gm          :<C-u>call LanguageClient_contextMenuItems()<CR>
- nnoremap  <silent>gx          :<C-u>call LanguageClient_textDocument_codeAction()<CR>
- nnoremap  <silent>gf          :<C-u>call LanguageClient_textDocument_references()<CR>
- nnoremap  <silent>gd          :<C-u>call LanguageClient_textDocument_definition()<CR>
- nnoremap  <silent>gi          :<C-u>call LanguageClient_textDocument_implementation()<CR>
- nnoremap  <silent>gn          :<C-u>call LanguageClient_textDocument_rename()<CR>
- nnoremap  <silent>gh          :<C-u>call LanguageClient_textDocument_hover()<CR>
- nnoremap  <silent>gl          :<C-u>call LanguageClient_textDocument_documentHighlight()<CR>
- nnoremap  <silent>gc          :<C-u>call LanguageClient_clearDocumentHighlight()<CR>
- nnoremap  <silent>gs          :<C-u>call LanguageClient_textDocument_documentSymbol()<CR>
+" nnoremap  <silent>gm          :<C-u>call LanguageClient_contextMenuItems()<CR>
+" nnoremap  <silent>gx          :<C-u>call LanguageClient_textDocument_codeAction()<CR>
+  nnoremap  <silent><C-{>       :<C-u>call LanguageClient_textDocument_references()<CR>
+  nnoremap  <silent><C-]>       :<C-u>call LanguageClient_textDocument_definition()<CR>
+  nnoremap  <silent><C-[>       :<C-u>call LanguageClient_textDocument_implementation()<CR>
+  nnoremap  <silent><C-}>       :<C-u>call LanguageClient_textDocument_hover()<CR>
+   " Rename - rn => rename
+   noremap <leader>rn           :call LanguageClient#textDocument_rename()<CR>
+    " Rename - rc => rename camelCase
+  noremap <leader>rc            :call LanguageClient#textDocument_rename(
+                \ {'newName': Abolish.camelcase(expand('<cword>'))})<CR>
+    " Rename - rs => rename snake_case
+  noremap <leader>rs            :call LanguageClient#textDocument_rename(
+                \ {'newName': Abolish.snakecase(expand('<cword>'))})<CR>
+    " Rename - ru => rename UPPERCASE
+  noremap <leader>ru            :call LanguageClient#textDocument_rename(
+                \ {'newName': Abolish.uppercase(expand('<cword>'))})<CR>
+"  noremap <leader>h :call LanguageClient#textDocument_documentHighlight()<CR>
+"  noremap <leader>nh :call LanguageClient#clearDocumentHighlight()<CR>
+  noremap <leader>m              :call LanguageClient_contextMenu()<CR>
 endif
 
 " Language:
 "" Go:
 Gautocmd BufRead,BufNewFile *.tmpl set filetype=gohtmltmpl
-Gautocmdft go let g:LanguageClient_diagnosticsEnable = 0
-" Gautocmdft go let g:airline_section_c = airline#section#create(['%<', 'readonly', 'path', ' ', '%{go#statusline#Show()}'])
 
 " Vim:
 "" nested autoload
@@ -646,130 +640,30 @@ endif
 "" Gitcommit:
 Gautocmd BufEnter COMMIT_EDITMSG  startinsert
 
-"" Gina:
-"Gautocmd BufEnter gina://*:commit startinsert
-"Gautocmd BufEnter gina://* nnoremap <silent><buffer>q :q<CR>
 Gautocmdft jsp,asp,php,xml,perl syntax sync minlines=500 maxlines=1000
 
 "" Gitfugitive: 
 Gautocmd QuickFixCmdPost *grep* cwindow
-"" Yaml:
 
 " -------------------------------------------------------------------------------------------------
 " Language Settings:
-
-" Go:
-"" Nvim Go:
-"let g:go#build#appengine = 0
-"let g:go#build#autosave = 1
-"let g:go#build#is_not_gb = 0
-"let go#highlight#cgo = 1
-"" let g:go#build#flags = ['-race']
-"let g:go#build#force = 0
-"let g:go#fmt#autosave  = 1
-"let g:go#fmt#mode = 'goimports'
-"let g:go#guru#keep_cursor = {
-"      \ 'callees'    : 0,
-"      \ 'callers'    : 0,
-"      \ 'callstack'  : 0,
-"      \ 'definition' : 1,
-"      \ 'describe'   : 0,
-"      \ 'freevars'   : 0,
-"      \ 'implements' : 0,
-"      \ 'peers'      : 0,
-"      \ 'pointsto'   : 0,
-"      \ 'referrers'  : 0,
-"      \ 'whicherrs'  : 0
-"      \ }
-"let g:go#generate#test#subtest = 1
-"let g:go#guru#reflection = 0
-"let g:go#iferr#autosave = 0
-"let g:go#lint#golint#autosave = 0
-"let g:go#lint#golint#ignore = ['internal', 'vendor', 'pb', 'fbs']
-"let g:go#lint#golint#mode = 'root'
-"let g:go#lint#govet#autosave = 0
-"let g:go#lint#govet#flags = ['-v', '-all']
-"let g:go#lint#govet#ignore = ['vendor', 'testdata', '_tmp']
-"let g:go#lint#metalinter#autosave = 0
-"let g:go#lint#metalinter#autosave#tools = ['vet', 'golint']
-"let g:go#lint#metalinter#deadline = '20s'
-"let g:go#lint#metalinter#skip_dir = ['internal', 'vendor', 'testdata', '__*.go', '*_test.go']
-"let g:go#lint#metalinter#tools = ['vet', 'golint']
-"let g:go#rename#prefill = 1
-"let g:go#snippets#loaded = 1
-"let g:go#terminal#height = 120
-"let g:go#terminal#start_insert = 1
-"let g:go#terminal#width = 120
-"let g:go#test#all_package = 0
-"let g:go#test#autosave = 0
-"let g:go#test#flags = ['-v']
-"let g:go#debug = 1
-"let g:go#debug#pprof = 0
-"""" highlight
-"let g:go#highlight#terminal#test = 1
-"
-"
-""" Vim Go:
-"" let g:go#use_vimproc = 1
-"" let g:go_asmfmt_autosave = 1
-"" let g:go_auto_type_info = 0
-"" let g:go_autodetect_gopath = 1
-"" let g:go_def_mapping_enabled = 0
-"" let g:go_def_mode = 'godef'
-"" let g:go_doc_command = 'godoc'
-"" let g:go_doc_options = ''
-"" let g:go_fmt_autosave = 1
-"" let g:go_fmt_command = 'goimports'
-"" let g:go_fmt_experimental = 1
-"" let g:go_loclist_height = 15
-"" let g:go_metalinter_enabled = ['vet', 'golint', 'errcheck', 'gotype']
-"" let g:go_snippet_engine = 'neosnippet' " ultisnips
-"" let g:go_template_enabled = 0
-"" let g:go_term_enabled = 1
-"" let g:go_term_height = 30
-"" let g:go_term_width = 30
-"let g:go_doc_max_height = 30
-"let g:go_highlight_array_whitespace_error = 0    " default : 1
-"let g:go_highlight_build_constraints = 1
-"let g:go_highlight_chan_whitespace_error = 0     " default : 1
-"let g:go_highlight_extra_types = 1
-"let g:go_highlight_fields = 0                    " default : 0
-"let g:go_highlight_format_strings = 1
-"let g:go_highlight_functions = 1                 " default : 0
-"let g:go_highlight_generate_tags = 1             " default : 0
-"let g:go_highlight_interfaces = 1                " default : 0
-"let g:go_highlight_methods = 1                   " default : 0
-"let g:go_highlight_operators = 1                 " default : 0
-"let g:go_highlight_space_tab_error = 0           " default : 1
-"let g:go_highlight_string_spellcheck = 0         " default : 1
-"let g:go_highlight_structs = 1                   " default : 0
-"let g:go_highlight_trailing_whitespace_error = 0 " default : 1
-
 
 " C CXX:
 "" VimCPPModern:
 let g:cpp_simple_highlight = 0  " Put all standard C and C++ keywords under Vim's highlight group `Statement` (affects both C and C++ files)
 let g:cpp_named_requirements_highlight = 1  " Enable highlighting of named requirements (C++20 library concepts)
+"
 "" Rtags:
-let g:rtagsJumpStackMaxSize = 1000
-let g:rtagsMaxSearchResultWindowHeight = 15
-let g:rtagsMinCharsForCommandCompletion = 100
-let g:rtagsUseDefaultMappings = 1
-let g:rtagsUseLocationList = 0  "By default, search results are showed in a location list. Location lists are local to the current window. To use the vim QuickFix window, which is shared between all windows, set: 0
+"let g:rtagsJumpStackMaxSize = 1000
+"let g:rtagsMaxSearchResultWindowHeight = 15
+"let g:rtagsMinCharsForCommandCompletion = 100
+"let g:rtagsUseDefaultMappings = 1
+"let g:rtagsUseLocationList = 0  "By default, search results are showed in a location list. Location lists are local to the current window. To use the vim QuickFix window, which is shared between all windows, set: 0
 
 
 " Asm:
 let g:nasm_loose_syntax = 1
 let g:nasm_ctx_outside_macro = 1
-
-
-" Rust:
-let g:rust_clip_command = 'pbcopy'
-let g:rustfmt_autosave = 0
-let g:rustfmt_command = 'rustfmt'
-
-
-"" Yaml:
 
 
 " TerraForm:
@@ -812,6 +706,7 @@ let g:slide_fenced_languages = [
       \ 'vim',
       \ 'yaml',
       \ ]
+"
 "" VimMarkdownfmt:
 let g:markdownfmt_command = 'markdownfmt'
 let g:markdownfmt_options = ''
@@ -932,11 +827,12 @@ let g:LanguageClient_loadSettings = 1
 let g:LanguageClient_selectionUI = 'fzf'  " fzf, quickfix, location-list
 let g:LanguageClient_settingsPath = '.lsp.json'
 let g:LanguageClient_windowLogMessageLevel = "Warning"  " Error, default: Warning, Info, Log
-let g:LanguageClient_serverCommands_c = ['/usr/local/bin/cquery', '--log-file=/tmp/cq.log', '--init={"index":{"comments":2},"cacheFormat":"msgpack","cacheDirectory":"/Users/kspark/.cache/cquery","resourceDirectory":"/usr/local/opt/llvm/lib/clang/7.0.1"}']
+"let g:LanguageClient_serverCommands_c = [ 'clangd']
+"let g:LanguageClient_serverCommands_c = ['/usr/local/bin/cquery', '--log-file=/tmp/cq.log', '--init={"index":{"comments":2},"cacheFormat":"msgpack","cacheDirectory":"/Users/kspark/.cache/cquery","resourceDirectory":"/usr/local/opt/llvm/lib/clang/7.0.1"}']
 let g:LanguageClient_serverCommands = {
-       \ 'c': g:LanguageClient_serverCommands_c,
-      \ 'cpp': g:LanguageClient_serverCommands_c,
-      \ 'objc': g:LanguageClient_serverCommands_c,
+       \ 'c': ['clangd'],
+      \ 'cpp': ['clangd', '-std=c++17 -x c++'],
+      \ 'objc': ['clangd'],
       \ 'swift': ['langserver-swift'],
       \ 'go': ['go-langserver', '-format-tool=goimports', '-func-snippet-enabled=false', '-maxparallelism=10', '-mode=stdio', '-usebinarypkgcache'],
       \ 'graphql': ['graphql', 'autocomplete'],
@@ -1058,6 +954,7 @@ let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_list_window_size = 10
 let g:ale_open_list = 1
+let g:ale_set_balloons = 1
 let g:ale_set_loclist = 0
 let g:ale_set_quickfix = 1
 let g:ale_sign_column_always = 1
@@ -1231,6 +1128,22 @@ let g:openbrowser_message_verbosity = 1
 
 " Neoformat:
 " let g:neoformat_enabled_python = ['autopep8', 'yapf']
+" NVMIM-GDB
+ let g:nvimgdb_config = {
+    \ 'key_until':      'u',
+    \ 'key_continue':   'c',
+    \ 'key_next':       'n',
+    \ 'key_step':       's',
+    \ 'key_finish':     'f',
+    \ 'key_breakpoint': 'b',
+    \ 'key_frameup':    '<c-p>',
+    \ 'key_framedown':  '<c-n>',
+    \ 'key_eval':       '<f9>',
+    \ 'set_tkeymaps':   'function("GdbCallAsync", "keymaps.setT")',
+    \ 'sign_current_line': '▶',
+    \ 'sign_breakpoint': [ '●', '●²', '●³', '●⁴', '●⁵', '●⁶', '●⁷', '●⁸', '●⁹', '●ⁿ' ],
+    \ 'split_command': 'split'
+    \ }
 
 " CtrlP:
 " let g:ctrlp_follow_symlinks = 1
@@ -1302,8 +1215,8 @@ function! s:build_quickfix_list(lines)
 endfunction
 "key bindings for fzf
 nmap <Leader>b :Buffers<CR>
-nmap <Leader>f :Files<CR>
-nmap <Leader>r :Tags<CR>>
+"nmap <Leader>f :Files<CR>
+"nmap <Leader>r :Tags<CR>>
 
 let g:fzf_action = {
   \ 'ctrl-q': function('s:build_quickfix_list'),
@@ -1733,38 +1646,32 @@ nnoremap <silent><LocalLeader>nt           :<C-u>NERDTreeToggle<CR>
 " Language:
 
 "" Go:
-Gautocmdft go nnoremap       <silent><buffer><C-]>        :<C-u>call GoGuru('definition')<CR>
-""" normal
-""" <Leader>
-Gautocmdft go nmap  <silent><buffer><Leader>e             <Plug>(nvim-go-rename)
-""" <LocalLeader>
-Gautocmdft go nmap  <silent><buffer><LocalLeader>gc       <Plug>(nvim-go-callers)
-Gautocmdft go nmap  <silent><buffer><LocalLeader>gcs      <Plug>(nvim-go-callstack)
-Gautocmdft go nmap  <silent><buffer><LocalLeader>ge       <Plug>(nvim-go-callees)
-Gautocmdft go nmap  <silent><buffer><LocalLeader>gi       <Plug>(nvim-go-implements)
-Gautocmdft go nmap  <silent><buffer><LocalLeader>gr       <Plug>(nvim-go-referrers)
-Gautocmdft go nmap  <silent><buffer><LocalLeader>gs       <Plug>(nvim-go-switch-test)
-Gautocmdft go nmap  <silent><buffer><LocalLeader>i        <Plug>(nvim-go-iferr)
-Gautocmdft go nmap  <silent><buffer><LocalLeader>l        <Plug>(nvim-go-lint)
-Gautocmdft go nmap  <silent><buffer><LocalLeader>m        <Plug>(nvim-go-metalinter)
-Gautocmdft go nmap  <silent><buffer><LocalLeader>r        <Plug>(nvim-go-run)
-Gautocmdft go nmap  <silent><buffer><LocalLeader>t        <Plug>(nvim-go-test)
-Gautocmdft go nmap  <silent><buffer><LocalLeader>v        <Plug>(nvim-go-vet)
-Gautocmd BufNewFile,BufRead,BufEnter godoc://** nmap <C-]> <CR>
+"Gautocmdft go nnoremap       <silent><buffer><C-]>        :<C-u>call GoGuru('definition')<CR>
+"""" normal
+"""" <Leader>
+"Gautocmdft go nmap  <silent><buffer><Leader>e             <Plug>(nvim-go-rename)
+"""" <LocalLeader>
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>gc       <Plug>(nvim-go-callers)
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>gcs      <Plug>(nvim-go-callstack)
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>ge       <Plug>(nvim-go-callees)
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>gi       <Plug>(nvim-go-implements)
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>gr       <Plug>(nvim-go-referrers)
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>gs       <Plug>(nvim-go-switch-test)
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>i        <Plug>(nvim-go-iferr)
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>l        <Plug>(nvim-go-lint)
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>m        <Plug>(nvim-go-metalinter)
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>r        <Plug>(nvim-go-run)
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>t        <Plug>(nvim-go-test)
+"Gautocmdft go nmap  <silent><buffer><LocalLeader>v        <Plug>(nvim-go-vet)
+"Gautocmd BufNewFile,BufRead,BufEnter godoc://** nmap <C-]> <CR>
 
 "" C CXX ObjC:
 Gautocmdft c,cpp             nnoremap <silent><buffer>K   :<C-u>call <SID>open_online_cfamily_doc()<CR>
 if dein#tap('vim-clang-format')
-  Gautocmdft c,cpp,objc,objcpp,proto map      <buffer><Leader>x   <Plug>(operator-clang-format)
   Gautocmdft c,cpp,objc,objcpp,proto nmap     <buffer><Leader>C   :<C-u>ClangFormatAutoToggle<CR>
   Gautocmdft c,cpp,objc,objcpp,proto nnoremap <buffer><Leader>cf  :<C-u>ClangFormat<CR>
 endif
 "
-"" Rust:
-Gautocmdft rust nmap <buffer><C-]>    <Plug>(rust-def)
-Gautocmdft rust nmap <buffer><C-S-]>  <Plug>(rust-def-vertical)
-Gautocmdft rust nmap <buffer>K        <Plug>(rust-doc)
-
 "" Python Cython:
 " Gautocmdft python,cython nnoremap <silent><buffer>K          :<C-u>call jedi#show_documentation()<CR>
 " Gautocmdft python,cython nnoremap <silent><buffer><C-]>      :<C-u>call jedi#goto()<CR>
@@ -1772,16 +1679,6 @@ Gautocmdft rust nmap <buffer>K        <Plug>(rust-doc)
 " Gautocmdft python,cython nnoremap <silent><buffer><C-f>      :<C-u>call Flake8()<CR><C-w>w :call feedkeys("<Up>")<CR>
 " Gautocmdft python,cython nnoremap <silent><buffer><Leader>]  :<C-u>tag <c-r>=expand("<cword>")<CR><CR>
 " Gautocmdft python,cython nnoremap <silent><buffer><Leader>e  :<C-u>call jedi#rename_visual()<CR>
-
-"" Protobuf:
-if dein#tap('prototool')
-  Gautocmdft proto nnoremap <silent><Leader>fo   :<C-u>call PrototoolFormatToggle()<CR>
-endif
-
-"" Yaml:
-
-"" Markdown:
-Gautocmdft markdown nmap <silent><LocalLeader>fo  :<C-u>call markdownfmt#Format()<CR>
 
 "" Vim:
 " http://ku.ido.nu/post/90355094974/how-to-grep-a-word-under-the-cursor-on-vim
@@ -1808,13 +1705,6 @@ inoremap <silent><C-p>  <C-r>*
 inoremap <silent><C-j>  <C-r>*
 
 " Language:
-
-"" Go:
-Gautocmdft go,yaml,toml inoremap <buffer> "    '
-Gautocmdft go,yaml,toml inoremap <buffer> '    "
-
-"" Swift:
-Gautocmdft swift imap <buffer><C-k>  <Plug>(autocomplete_swift_jump_to_placeholder)
 
 " Deoplete:
 inoremap <silent><expr><CR>     pumvisible() ? deoplete#mappings#close_popup() : "\<CR>"
@@ -1843,22 +1733,6 @@ vnoremap P       "_dP
 vnoremap p       "_dp
 vnoremap @       ^
 vnoremap ^       @
-" sort by ignorecase alphabetically.
-vnoremap <silent>gs :<C-u>'<,'>sort i<CR>
-vnoremap v       <End>h
-" Move to start of line
-vnoremap V ^
-" Jump to match pair brackets
-vnoremap <S-Tab> %
-
-
-" Language:
-
-"" Protobuf:
-Gautocmdft proto vnoremap <buffer><Leader>cf  :<C-u>ClangFormat<CR>
-
-"" C CXX ObjC:
-Gautocmdft c,cpp,objc,objcpp,proto vnoremap <buffer><Leader>cf  :<C-u>ClangFormat<CR>
 
 " -------------------------------------------------------------------------------------------------
 " Visual: (x)
