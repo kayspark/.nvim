@@ -724,8 +724,8 @@ let s:deoplete_custom_option = {
       \ 'ignore_case': v:true,
       \ 'ignore_sources': {
       \   '_': s:default_ignore_sources+['LanguageClient'],
-      \   'c': s:default_ignore_sources+['buffer'],
-      \   'cpp': s:default_ignore_sources+['buffer'],
+      \   'c': s:default_ignore_sources,
+      \   'cpp': s:default_ignore_sources,
       \   'dockerfile': s:default_ignore_sources,
       \   'go': s:default_ignore_sources+['buffer', 'file', 'LanguageClient', 'neosnippet'],
       \   'javascript': s:default_ignore_sources,
@@ -853,10 +853,7 @@ let g:LanguageClient_settingsPath = '.lsp.json'
 let g:LanguageClient_windowLogMessageLevel = "Warning"  " Error, default: Warning, Info, Log
 let s:LanguageClient_serverCommands_c = ['clangd', '-j=12', '-index=1', '-completion-style=detailed', '-header-insertion-decorators', '-include-ineligible-results', '-input-style=standard', 'pch-storage=disk','-static-func-full-module-prefix', '-use-dbg-addr','-view-background', ]
 let g:LanguageClient_serverCommands = {
-      \ 'c'   : s:LanguageClient_serverCommands_c,
-      \ 'cpp'   : s:LanguageClient_serverCommands_c,
-      \ 'objc'   : s:LanguageClient_serverCommands_c,
-      \ 'objcpp'   : s:LanguageClient_serverCommands_c,
+      \ 'cpp'   : ['clangd', '-j=12',],
       \ }
 let s:LanguageClient_rootMarkers_c = ['autogen.sh', 'configure', '.clang-format']
 let g:LanguageClient_rootMarkers = {
