@@ -18,12 +18,20 @@ if has ('unix')
 
   let g:python_host_prog = '/usr/bin/python2'
   let g:python3_host_prog = '/usr/bin/python3'
-  "let g:ruby_host_prog = '/usr/local/opt/ruby/bin/ruby'
+  let s:python2_include_dir = '/usr/include/python2.7'
+  let s:python3_include_dir = '/usr/include/python3.7m'
+  let s:fzf_install_dir = $HOME . '/.fzf'
 elseif has('macunix')
   let g:ruby_host_prog = '/usr/local/bin/ruby'
 
   let g:python_host_prog = '/usr/local/bin/python2'
   let g:python3_host_prog = '/usr/local/bin/python3'
+  let s:python2_include_dir = '/usr/local/opt/python2/Frameworks/Python.framework/Headers'
+  let s:python3_include_dir = '/usr/local/opt/python3/Frameworks/Python.framework/Headers'
+  let s:fzf_install_dir = /usr/local/opt/fzf'
+  set wildignore+=*.DS_Store  " macOS only
+  Gautocmdft c,cpp,objc,objcpp source $XDG_CONFIG_HOME/nvim/path/macOS_header.vim  " only Go and C family filetype
+
   let g:clipboard = {
         \   'name': 'macOS-clipboard',
         \   'copy': {
@@ -180,13 +188,6 @@ if !isdirectory(&undodir)
   call mkdir(&undodir, "p")
 endif
 
-if has('mac')
-  set wildignore+=*.DS_Store  " macOS only
-  Gautocmdft c,cpp,objc,objcpp source $XDG_CONFIG_HOME/nvim/path/macOS_header.vim  " only Go and C family filetype
-endif
-
-let s:python2_include_dir = '/usr/include/python2.7'
-let s:python3_include_dir = '/usr/include/python3.7m'
 if isdirectory(s:python2_include_dir)
   set path+=s:python2_include_dir
 endif
@@ -229,8 +230,6 @@ let g:myscriptsfile             = 1 " $VIMRUNTIME/scripts.vim
 let g:netrw_nogx                = 1
 let g:suppress_doxygen          = 1 " $VIMRUNTIME/syntax/doxygen.vim
 
-"fzf install by brew
-let s:fzf_install_dir = $HOME . '/.fzf'
 " -------------------------------------------------------------------------------------------------
 
 " Dein:
@@ -326,8 +325,8 @@ if dein#load_state(s:dein_cache_dir)
   call dein#add('itchyny/lightline.vim')
   call dein#add('maximbaz/lightline-ale')
   call dein#add('mgee/lightline-bufferline')  
-"  call dein#add('vim-airline/vim-airline')
-"  call dein#add('vim-airline/vim-airline-themes', { 'depends': ['vim-airline/vim-airline'] })
+  "  call dein#add('vim-airline/vim-airline')
+  "  call dein#add('vim-airline/vim-airline-themes', { 'depends': ['vim-airline/vim-airline'] })
   call dein#add('ryanoasis/vim-devicons')
 
   " Operator:
@@ -1194,16 +1193,16 @@ let g:openbrowser_message_verbosity = 1
 " Previous use plugins
 
 " Jedivim:
- let g:jedi#auto_initialization = 0
- let g:jedi#use_splits_not_buffers = ''
- let g:jedi#auto_vim_configuration = 0
- let g:jedi#completions_enabled = 0
- let g:jedi#documentation_command = "K"
- let g:jedi#force_py_version = 3
- let g:jedi#max_doc_height = 150
- let g:jedi#popup_select_first = 0
- let g:jedi#show_call_signatures = 0
- let g:jedi#smart_auto_mappings = 0
+let g:jedi#auto_initialization = 0
+let g:jedi#use_splits_not_buffers = ''
+let g:jedi#auto_vim_configuration = 0
+let g:jedi#completions_enabled = 0
+let g:jedi#documentation_command = "K"
+let g:jedi#force_py_version = 3
+let g:jedi#max_doc_height = 150
+let g:jedi#popup_select_first = 0
+let g:jedi#show_call_signatures = 0
+let g:jedi#smart_auto_mappings = 0
 
 " NERDTree:
 let g:NERDTreeAutoDeleteBuffer = 1
