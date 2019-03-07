@@ -13,24 +13,14 @@ let s:gopath = expand('$HOME/go') . '/src'
 let s:srcpath = expand('$HOME/Documents/')
 " -------------------------------------------------------------------------------------------------
 " Neovim Configs:
-if has ('unix')
-  let g:ruby_host_prog = '/usr/bin/ruby'
-
-  let g:python_host_prog = '/usr/bin/python2'
-  let g:python3_host_prog = '/usr/bin/python3'
-  let s:python2_include_dir = '/usr/include/python2.7'
-  let s:python3_include_dir = '/usr/include/python3.7m'
-  let s:fzf_install_dir = $HOME . '/.fzf'
-elseif has('macunix')
+if has('macunix')
   let g:ruby_host_prog = '/usr/local/bin/ruby'
-
   let g:python_host_prog = '/usr/local/bin/python2'
   let g:python3_host_prog = '/usr/local/bin/python3'
   let s:python2_include_dir = '/usr/local/opt/python2/Frameworks/Python.framework/Headers'
   let s:python3_include_dir = '/usr/local/opt/python3/Frameworks/Python.framework/Headers'
-  let s:fzf_install_dir = /usr/local/opt/fzf'
+  let s:fzf_install_dir = '/usr/local/opt/fzf'
   set wildignore+=*.DS_Store  " macOS only
-  Gautocmdft c,cpp,objc,objcpp source $XDG_CONFIG_HOME/nvim/path/macOS_header.vim  " only Go and C family filetype
 
   let g:clipboard = {
         \   'name': 'macOS-clipboard',
@@ -44,6 +34,14 @@ elseif has('macunix')
         \   },
         \   'cache_enabled': 1,
         \ }
+elseif has ('unix')
+  let g:ruby_host_prog = '/usr/bin/ruby'
+
+  let g:python_host_prog = '/usr/bin/python2'
+  let g:python3_host_prog = '/usr/bin/python3'
+  let s:python2_include_dir = '/usr/include/python2.7'
+  let s:python3_include_dir = '/usr/include/python3.7m'
+  let s:fzf_install_dir = $HOME . '/.fzf'
 endif
 
 let g:loaded_python_provider = 1
@@ -548,7 +546,9 @@ silent! filetype plugin indent on
 
 " -------------------------------------------------------------------------------------------------
 " Gautocmd:
-
+if has('mac')
+  Gautocmdft c,cpp,objc,objcpp source $XDG_CONFIG_HOME/nvim/path/macOS_header.vim  " only Go and C family filetype
+endif
 " Global:
 " always jump to the last known cursor position
 "  https://github.com/neovim/neovim/blob/master/runtime/vimrc_example.vim
@@ -871,26 +871,33 @@ let g:LanguageClient_loadSettings = 1
 let g:LanguageClient_selectionUI = 'fzf'  " fzf, quickfix, location-list
 let g:LanguageClient_settingsPath = '.lsp.json'
 let g:LanguageClient_windowLogMessageLevel = "Warning"  " Error, default: Warning, Info, Log
-let s:LanguageClient_serverCommands_c = [
-      \ 'clangd-8',
-      \ '-all-scopes-completion',
-      \ '-background-index',
-      \ '-compile-commands-dir=build',
-      \ '-compile_args_from=filesystem',
-      \ '-completion-style=detailed',
-      \ '-function-arg-placeholders',
-      \ '-header-insertion-decorators',
-      \ '-include-ineligible-results',
-      \ '-index',
-      \ '-input-style=standard',
-      \ '-j=12',
-      \ '-pch-storage=disk',
-      \ '-resource-dir=/usr/lib/clang/8.0.0/include',
-      \ '-static-func-full-module-prefix',
-      \ '-use-dbg-addr',
-      \ '-use-dex-index',
-      \ '-view-background',
-      \ ] 
+if has('mac')
+  let s:LanguageClient_serverCommands_c = [
+        \ 'clangd',
+        \'-j=12',
+        \]
+elseif has('unix')
+  let s:LanguageClient_serverCommands_c = [
+        \ 'clangd-8',
+        \ '-all-scopes-completion',
+        \ '-background-index',
+        \ '-compile-commands-dir=build',
+        \ '-compile_args_from=filesystem',
+        \ '-completion-style=detailed',
+        \ '-function-arg-placeholders',
+        \ '-header-insertion-decorators',
+        \ '-include-ineligible-results',
+        \ '-index',
+        \ '-input-style=standard',
+        \ '-j=12',
+        \ '-pch-storage=disk',
+        \ '-resource-dir=/usr/lib/clang/8.0.0/include',
+        \ '-static-func-full-module-prefix',
+        \ '-use-dbg-addr',
+        \ '-use-dex-index',
+        \ '-view-background',
+        \ ] 
+endif
 let g:LanguageClient_serverCommands = {
       \ 'c': s:LanguageClient_serverCommands_c,
       \ 'cpp': s:LanguageClient_serverCommands_c,
