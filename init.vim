@@ -323,8 +323,11 @@ if dein#load_state(s:dein_cache_dir)
   " References:
 
   " Interface:
-  call dein#add('vim-airline/vim-airline')
-  call dein#add('vim-airline/vim-airline-themes', { 'depends': ['vim-airline/vim-airline'] })
+  call dein#add('itchyny/lightline.vim')
+  call dein#add('maximbaz/lightline-ale')
+  call dein#add('mgee/lightline-bufferline')  
+"  call dein#add('vim-airline/vim-airline')
+"  call dein#add('vim-airline/vim-airline-themes', { 'depends': ['vim-airline/vim-airline'] })
   call dein#add('ryanoasis/vim-devicons')
 
   " Operator:
@@ -979,23 +982,28 @@ let g:vikube_use_current_namespace = 1
 let g:ale_cache_executable_check_failures = 1
 let g:ale_change_sign_column_color = 0
 let g:ale_completion_enabled = 0
+let g:ale_cursor_detail = 1
 let g:ale_echo_cursor = 1
-let g:ale_echo_delay = 1
-let g:ale_emit_conflict_warnings = 0
-let g:ale_fix_on_save = 0
+let g:ale_echo_delay = 20
+let g:ale_fix_on_save = 1
 let g:ale_keep_list_window_open = 0
+let g:ale_lint_delay = 0
 let g:ale_lint_on_enter = 0
 let g:ale_lint_on_filetype_changed = 0
 let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
-let g:ale_list_window_size = 5
-let g:ale_open_list = 1
-let g:ale_set_balloons = 1
+let g:ale_list_window_size = 10
+let g:ale_open_list = 0
+let g:ale_set_highlights = 0
 let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 1
+let g:ale_set_quickfix = 0
 let g:ale_sign_column_always = 1
-
+let g:ale_use_global_executables = 1
+let g:ale_virtualtext_cursor = 1
+let g:ale_virtualtext_delay = 20
+let g:ale_warn_about_trailing_blank_lines = 1
+let g:ale_warn_about_trailing_whitespace = 1
 "" linters
 let g:ale_linters = {}
 let g:ale_linters.dockerfile = ['hadolint']
@@ -1022,7 +1030,7 @@ let g:ale_go_gometalinter_options = '--fast --enable=staticcheck --enable=gosimp
 let g:ale_go_staticcheck_options = ''
 let g:ale_go_staticcheck_package = 1
 "" Shell ShellCheck Shfmt:
-let g:ale_sh_shell_default_shell = 'bash'
+let g:ale_sh_shell_default_shell = 'zsh'
 let g:ale_sh_shellcheck_executable = '/usr/bin/shellcheck'
 let g:ale_sh_shellcheck_options = '-x -s bash'
 let g:ale_sh_shfmt_options = ''
@@ -1036,48 +1044,95 @@ let g:caw_no_default_keymappings = 1
 let g:caw_operator_keymappings = 0
 
 
-" Airline:
-let g:airline#extensions#ale#enabled = 1
-let g:airline#extensions#ale#error_symbol = 'E:'
-let g:airline#extensions#ale#warning_symbol = 'W:'
-let g:airline#extensions#ale#show_line_numbers = 1
-let g:airline#extensions#ale#open_lnum_symbol = '(L'
-let g:airline#extensions#ale#close_lnum_symbol = ')'
-let g:airline#extensions#branch#enabled = 1
-"let g:airline#extensions#branch#custom_head = 'gina#component#repo#branch'
-let g:airline#extensions#hunks#enabled = 0
-let g:airline#extensions#quickfix#location_text = 'Location'
-let g:airline#extensions#quickfix#quickfix_text = 'Quickfix'
-let g:airline#extensions#tabline#buffer_nr_show = 1
-let g:airline#extensions#tabline#buffers_label = 'b'
-let g:airline#extensions#tabline#enabled = 1
-let g:airline#extensions#tabline#left_sep = ' '
-let g:airline#extensions#tabline#left_alt_sep = '|'
-let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
-let g:airline#extensions#tabline#exclude_preview = 1
-let g:airline#extensions#tabline#fnamemod = ':t'
-let g:airline#extensions#tabline#show_buffers = 1
-let g:airline#extensions#tabline#show_splits = 1
-let g:airline#extensions#tabline#show_tab_nr = 1
-let g:airline#extensions#tabline#show_tab_type = 1
-let g:airline#extensions#tabline#show_tabs = 1
-let g:airline#extensions#tabline#switch_buffers_and_tabs = 1
-let g:airline#extensions#tabline#tab_nr_type = 2
-let g:airline#extensions#tabline#tabs_label = 't'
-let g:airline#extensions#tagbar#enabled = 0
-let g:airline#extensions#languageclient#enabled = 1
-let g:airline#extensions#whitespace#mixed_indent_algo = 2
-let g:airline#extensions#wordcount#enabled = 0
-let g:airline_exclude_filetypes = ['fzf']
-let g:airline_highlighting_cache = 1
-let g:airline_inactive_collapse = 0
-let g:airline_powerline_fonts = 1
-let g:airline_skip_empty_sections = 1
-let g:airline_theme = 'minimalist'
-if dein#source('vim-airline')
-  let g:airline_section_c = airline#section#create(['%<', 'readonly', 'path'])
-endif
+" LightLine:
+" https://donniewest.com/a-guide-to-basic-neovim-plugins
+let g:lightline = {}
+let g:lightline.colorscheme = 'dracula'
+function! DeviconsGetFileTypeSymbol()
+  return winwidth(0) > 70 ? (strlen(&filetype) ? &filetype . ' ' . WebDevIconsGetFileTypeSymbol() : 'no ft') : ''
+endfunction
+function! DeviconsGetFileFormatSymbol()
+  return winwidth(0) > 70 ? (&fileformat . ' ' . WebDevIconsGetFileFormatSymbol()) : ''
+endfunction
+" function! LightlineModified()
+"   let map = { 'V': 'n', "\<C-v>": 'n', 's': 'n', 'v': 'n', "\<C-s>": 'n', 'c': 'n', 'R': 'n'}
+"   let mode = get(map, mode()[0], mode()[0])
+"   let bgcolor = {'n': [240, '#B5BD68'], 'i': [31, '#82AAFF']}
+"   let color = get(bgcolor, mode, bgcolor.n)
+"   exe printf('hi ModifiedColor ctermfg=196 ctermbg=%d guifg=#282a2e guibg=%s gui=bold term=bold cterm=bold', color[0], color[1])
+"   return &modified ? '+' : &modifiable ? '' : '-'
+" endfunction
+function! LightlineModified()
+  hi ModifiedColor ctermfg=167 guifg=#cf6a4c ctermbg=242 guibg=#666656 term=bold cterm=bold
+  return &modified ? '+' : &modifiable ? '' : '-'
+endfunction
+let g:lightline.component = {
+      \ 'absolutepath': '%F',
+      \ 'bufnum': '%n',
+      \ 'charvalue': '%b',
+      \ 'charvaluehex': '%B',
+      \ 'close': '%999X X ',
+      \ 'column': '%c',
+      \ 'fileencoding': '%{&fenc!=#""?&fenc:&enc}',
+      \ 'filename': '%{expand(''%:p'')}',
+      \ 'line': '%l',
+      \ 'lineinfo': '%3l  %-2v',
+      \ 'mode': '%{lightline#mode()}',
+      \ 'modified': '%( %#ModifiedColor#%{LightlineModified()} %)',
+      \ 'paste': '%{&paste?"PASTE":""}',
+      \ 'percent': '%3p%%',
+      \ 'percentwin': '%P',
+      \ 'readonly': '%R',
+      \ 'relativepath': '%f',
+      \ 'spell': '%{&spell?&spelllang:""}',
+      \ 'winnr': '%{winnr()}',
+      \ }
+let g:lightline.component_expand = {
+      \ 'linter_checking': 'lightline#ale#checking',
+      \ 'linter_errors': 'lightline#ale#errors',
+      \ 'linter_ok': 'lightline#ale#ok',
+      \ 'linter_warnings': 'lightline#ale#warnings',
+      \ }
+let g:lightline.component_type = {
+      \ 'modified': 'raw',
+      \ 'linter_checking': 'left',
+      \ 'linter_errors': 'error',
+      \ 'linter_ok': 'left',
+      \ 'linter_warnings': 'warning',
+      \ }
+let g:lightline.component_function = {
+      \ 'fileformat': 'DeviconsGetFileFormatSymbol',
+      \ 'filetype': 'DeviconsGetFileTypeSymbol',
+      \ 'gitbranch': 'gina#component#repo#branch',
+      \ }
+let g:lightline.active = {
+      \ 'left': [ ['mode', 'paste'], ['filename', 'gitbranch'] ],
+      \ 'right': [ [ 'lineinfo', 'percent' ], [ 'filetype', 'fileformat', 'fileencoding' ], [ 'linter_checking', 'linter_errors', 'linter_warnings', 'linter_ok' ] ]
+      \ }
+let g:lightline.inactive = {
+      \ 'left': [ [ 'filename' ] ],
+      \ 'right': [ [ 'lineinfo' ], [ 'percent' ] ]
+      \ }
+let g:lightline.tabline = {
+      \ 'left': [ [ 'tabs' ] ],
+      \ 'right': [ [ 'close' ] ]
+      \ }
+let g:lightline.tab = {
+      \ 'active': [ 'tabnum', 'filename', 'modified' ],
+      \ 'inactive': [ 'tabnum', 'filename', 'modified' ]
+      \ }
+let g:lightline.enable = { 'statusline': 1, 'tabline': 1 }
+let g:lightline.separator = { 'left': '', 'right': '' }
+let g:lightline.subseparator = { 'left': ' ', 'right': ' ' }
+let g:lightline#bufferline#shorten_path = 1
+let g:lightline#bufferline#enable_devicons = 1
 
+function! s:MaybeUpdateLightline()
+  if exists('#lightline')
+    call lightline#update()
+  end
+endfunction
+Gautocmd User ALELint call s:MaybeUpdateLightline()
 
 " GitGutter:
 let g:gitgutter_async = 1

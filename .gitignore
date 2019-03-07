@@ -88,3 +88,5 @@ tmp/
 
 #mac
 .DS_Store
+
+node_modules/
