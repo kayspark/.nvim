@@ -26,7 +26,7 @@ let g:clipboard = {
 " -------------------------------------------------------------------------------------------------
 " Neovim Configs:
 if has('macunix')
-  let g:ruby_host_prog = '/usr/local/bin/ruby'
+  let g:ruby_host_prog = '/usr/local/opt/ruby/bin/ruby'
   let g:python_host_prog = '/usr/local/bin/python2'
   let g:python3_host_prog = '/usr/local/bin/python3'
   let s:python2_include_dir = '/usr/local/opt/python2/Frameworks/Python.framework/Headers'
