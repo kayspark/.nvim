@@ -1,4 +1,4 @@
-" Environment Variables:
+"cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/nmengine/1.0.2) Environment Variables:
 
 "let $XDG_RUNTIME_DIR = expand('/run/user/501')
 let $XDG_CACHE_HOME = expand($HOME.'/.cache')
@@ -11,6 +11,18 @@ let $ANSIBLE_VAULT_PASSWORD_FILE = expand($XDG_CONFIG_HOME . '/ansible-vault/vau
 
 let s:gopath = expand('$HOME/go') . '/src'
 let s:srcpath = expand('$HOME/Documents/')
+let g:clipboard = {
+      \   'name': 'macOS-clipboard',
+      \   'copy': {
+      \      '+': 'pbcopy',
+      \     '*': 'pbcopy',
+      \    },
+      \   'paste': {
+      \      '+': 'pbpaste',
+      \      '*': 'pbpaste',
+      \   },
+      \   'cache_enabled': 1,
+      \ }
 " -------------------------------------------------------------------------------------------------
 " Neovim Configs:
 if has('macunix')
@@ -22,18 +34,6 @@ if has('macunix')
   let s:fzf_install_dir = '/usr/local/opt/fzf'
   set wildignore+=*.DS_Store  " macOS only
 
-  let g:clipboard = {
-        \   'name': 'macOS-clipboard',
-        \   'copy': {
-        \      '+': 'pbcopy',
-        \     '*': 'pbcopy',
-        \    },
-        \   'paste': {
-        \      '+': 'pbpaste',
-        \      '*': 'pbpaste',
-        \   },
-        \   'cache_enabled': 1,
-        \ }
 elseif has ('unix')
   let g:ruby_host_prog = '/usr/bin/ruby'
 
