@@ -887,14 +887,12 @@ elseif has('unix')
         \ '-function-arg-placeholders',
         \ '-header-insertion-decorators',
         \ '-include-ineligible-results',
-        \ '-index',
         \ '-input-style=standard',
         \ '-j=12',
         \ '-pch-storage=disk',
         \ '-resource-dir=/usr/lib/clang/8.0.0/include',
         \ '-static-func-full-module-prefix',
         \ '-use-dbg-addr',
-        \ '-use-dex-index',
         \ '-view-background',
         \ ] 
 endif
@@ -1851,12 +1849,7 @@ cnoremap <C-d>    <Del>
 " -------------------------------------------------------------------------------------------------
 " Terminal: (t)
 
-" Emacs like mapping
-tnoremap <silent>qq      <C-\><C-n>
-tnoremap <S-Left>        <C-[>b
-tnoremap <C-Left>        <C-[>b
-tnoremap <S-Right>       <C-[>f
-tnoremap <C-Right>       <C-[>f
+tnoremap <C-w>       <<C-\><C-n><C-w>
 tnoremap <nowait><buffer><BS>    <BS>
 
 " -------------------------------------------------------------------------------------------------
