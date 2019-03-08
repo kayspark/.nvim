@@ -11,18 +11,6 @@ let $ANSIBLE_VAULT_PASSWORD_FILE = expand($XDG_CONFIG_HOME . '/ansible-vault/vau
 
 let s:gopath = expand('$HOME/go') . '/src'
 let s:srcpath = expand('$HOME/Documents/')
-let g:clipboard = {
-      \   'name': 'macOS-clipboard',
-      \   'copy': {
-      \      '+': 'pbcopy',
-      \     '*': 'pbcopy',
-      \    },
-      \   'paste': {
-      \      '+': 'pbpaste',
-      \      '*': 'pbpaste',
-      \   },
-      \   'cache_enabled': 1,
-      \ }
 " -------------------------------------------------------------------------------------------------
 " Neovim Configs:
 if has('macunix')
@@ -33,6 +21,18 @@ if has('macunix')
   let s:python3_include_dir = '/usr/local/opt/python3/Frameworks/Python.framework/Headers'
   let s:fzf_install_dir = '/usr/local/opt/fzf'
   set wildignore+=*.DS_Store  " macOS only
+  let g:clipboard = {
+        \   'name': 'macOS-clipboard',
+        \   'copy': {
+        \      '+': 'pbcopy',
+        \     '*': 'pbcopy',
+        \    },
+        \   'paste': {
+        \      '+': 'pbpaste',
+        \      '*': 'pbpaste',
+        \   },
+        \   'cache_enabled': 1,
+        \ }
 
 elseif has ('unix')
   let g:ruby_host_prog = '/usr/bin/ruby'
@@ -61,7 +61,7 @@ set backup
 set backupdir=$XDG_DATA_HOME/nvim/backup
 set belloff=all
 set cinoptions+=:0,g0,N-1,m1
-set clipboard^=unnamed,unnamedplus
+set clipboard^=unnamedplus
 set cmdheight=2
 set complete=.  " default: .,w,b,u,t
 set completeopt=menuone,noinsert,noselect  " longest
@@ -207,7 +207,7 @@ let g:load_doxygen_syntax       = 1 " $VIMRUNTIME/syntax/doxygen.vim
 let g:loaded_2html_plugin       = 1 " $VIMRUNTIME/plugin/tohtml.vim
 let g:loaded_gzip               = 1 " $VIMRUNTIME/plugin/gzip.vim
 let g:loaded_less               = 1 " $VIMRUNTIME/macros/less.vim
-let g:loaded_matchit            = 1 " $VIMRUNTIME/plugin/matchit.vim
+"let g:loaded_matchit            = 1 " $VIMRUNTIME/plugin/matchit.vim
 let g:loaded_matchparen         = 1 " $VIMRUNTIME/plugin/matchparen.vim
 let g:loaded_netrw              = 1 " $VIMRUNTIME/autoload/netrw.vim
 let g:loaded_netrwFileHandlers  = 1 " $VIMRUNTIME/autoload/netrwFileHandlers.vim
@@ -327,10 +327,10 @@ if dein#load_state(s:dein_cache_dir)
   "  call dein#add('vim-airline/vim-airline-themes', { 'depends': ['vim-airline/vim-airline'] })
   call dein#add('ryanoasis/vim-devicons')
 
-  " Operator:
-  call dein#add('kana/vim-operator-user')
-  call dein#add('kana/vim-operator-replace', { 'on_map': '<Plug>', 'depends': 'vim-operator-user' })
-  call dein#add('rhysd/vim-operator-surround', { 'on_map': '<Plug>', 'depends': 'vim-operator-user' })
+  "  " Operator:
+  "  call dein#add('kana/vim-operator-user')
+  "  call dein#add('kana/vim-operator-replace', { 'on_map': '<Plug>', 'depends': 'vim-operator-user' })
+  "  call dein#add('rhysd/vim-operator-surround', { 'on_map': '<Plug>', 'depends': 'vim-operator-user' })
 
   " Utility:
   call dein#add('Shougo/vimproc.vim', {'build': 'make'})
@@ -1708,11 +1708,6 @@ nnoremap <silent><LocalLeader>w         :<C-u>w<CR>
 " -------------------------------------------------------------------------------------------------
 " Map: (m)
 
-"" Operator:
-map <silent>ti  <Plug>(operator-surround-append)
-map <silent>td  <Plug>(operator-surround-delete)
-map <silent>tr  <Plug>(operator-surround-replace)
-
 " -------------------------------------------------------------------------------------------------
 " Normal: (n)
 
@@ -1820,7 +1815,7 @@ vnoremap ^       @
 
 " -------------------------------------------------------------------------------------------------
 " Visual: (x)
-xmap  <LocalLeader>        <Plug>(operator-replace)
+"xmap  <LocalLeader>        <Plug>(operator-replace)
 xmap     <silent>ga        <Plug>(EasyAlign)
 " xnoremap <expr>r              <Plug>(niceblock#force_blockwise('r'))
 
