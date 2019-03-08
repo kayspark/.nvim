@@ -19,7 +19,6 @@ if has('macunix')
   let g:python3_host_prog = '/usr/local/bin/python3'
   let s:python2_include_dir = '/usr/local/opt/python2/Frameworks/Python.framework/Headers'
   let s:python3_include_dir = '/usr/local/opt/python3/Frameworks/Python.framework/Headers'
-  let s:fzf_install_dir = '/usr/local/opt/fzf'
   set wildignore+=*.DS_Store  " macOS only
   let g:clipboard = {
         \   'name': 'macOS-clipboard',
@@ -41,7 +40,6 @@ elseif has ('unix')
   let g:python3_host_prog = '/usr/bin/python3'
   let s:python2_include_dir = '/usr/include/python2.7'
   let s:python3_include_dir = '/usr/include/python3.7m'
-  let s:fzf_install_dir = $HOME . '/.fzf'
 endif
 
 let g:loaded_python_provider = 1
@@ -270,8 +268,8 @@ if dein#load_state(s:dein_cache_dir)
     call dein#add('roxma/nvim-yarp')
     call dein#add('roxma/vim-hug-neovim-rpc')
   endif
-  call dein#add(s:fzf_install_dir) 
-  call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })
+call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) 
+call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })  
   call dein#add('Shougo/neco-vim', { 'on_ft': ['vim'] })
   "  call dein#add('LuXuryPro/deoplete-rtags', { 'on_ft': ['c', 'cpp', 'objc', 'objcpp'] })
   call dein#add('Shougo/neosnippet-snippets')
@@ -1681,11 +1679,6 @@ if !exists('g:maplocalleader')
   let g:maplocalleader = ","
 endif
 
-"" <Leader>
-"nnoremap              <Leader>ga        :<C-u>Gina add %<CR>
-"nnoremap              <Leader>gc        :<C-u>Gina commit<CR>
-"nnoremap              <Leader>gp        :<C-u>Gina push<CR>
-"nnoremap              <Leader>gs        :<C-u>Gina status<CR>
 
 "" <LocalLeader>
 nnoremap <silent><LocalLeader>*         :<C-u>DeniteCursorWord grep/rg -buffer-name='grep/rg' -mode=insert<CR>
@@ -1779,9 +1772,7 @@ inoremap <C-c> <ESC>
 " Move cursor to first or end of line
 inoremap <silent><C-a>  <C-o><S-i>
 inoremap <silent><C-e>  <C-o><S-a>
-" Put +register word
-inoremap <silent><C-p>  <C-r>*
-inoremap <silent><C-j>  <C-r>*
+"inoremap <silent><C-j>  <C-r>*
 
 " Language:
 
