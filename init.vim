@@ -1679,11 +1679,6 @@ if !exists('g:maplocalleader')
   let g:maplocalleader = ","
 endif
 
-"" <Leader>
-"nnoremap              <Leader>ga        :<C-u>Gina add %<CR>
-"nnoremap              <Leader>gc        :<C-u>Gina commit<CR>
-"nnoremap              <Leader>gp        :<C-u>Gina push<CR>
-"nnoremap              <Leader>gs        :<C-u>Gina status<CR>
 
 "" <LocalLeader>
 nnoremap <silent><LocalLeader>*         :<C-u>DeniteCursorWord grep/rg -buffer-name='grep/rg' -mode=insert<CR>
@@ -1777,9 +1772,7 @@ inoremap <C-c> <ESC>
 " Move cursor to first or end of line
 inoremap <silent><C-a>  <C-o><S-i>
 inoremap <silent><C-e>  <C-o><S-a>
-" Put +register word
-inoremap <silent><C-p>  <C-r>*
-inoremap <silent><C-j>  <C-r>*
+"inoremap <silent><C-j>  <C-r>*
 
 " Language:
 
