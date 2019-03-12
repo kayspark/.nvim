@@ -1,5 +1,3 @@
-"cmake .. -DCMAKE_INSTALL_PREFIX=/usr/local/Cellar/nmengine/1.0.2) Environment Variables:
-
 "let $XDG_RUNTIME_DIR = expand('/run/user/501')
 let $XDG_CACHE_HOME = expand($HOME.'/.cache')
 let $XDG_CONFIG_DIRS = expand('/etc/xdg')
@@ -260,7 +258,7 @@ if s:dein_dir != '' || &runtimepath !~ '/dein.vim'
       execute '!git clone https://github.com/Shougo/dein.vim' s:dein_dir
     endif
   endif
-  execute 'set runtimepath^=' . substitute(fnamemodify(s:dein_dir, ':p') , '/$', '', '')
+  execute 'set runtimepath+=' . substitute(fnamemodify(s:dein_dir, ':p') , '/$', '', '')
 endif
 
 let g:dein#install_max_processes = 3
