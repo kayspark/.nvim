@@ -96,7 +96,16 @@ set ignorecase
 "set inccommand=nosplit
 set laststatus=2
 set linebreak
-set list & listchars=nbsp:%,tab:»-,trail:_
+set list
+
+if has('gui_running')
+  set list listchars=tab:▶‒,nbsp:∙,trail:∙,extends:▶,precedes:◀
+  let &showbreak = '↳'
+else
+  set list listchars=tab:>-,nbsp:.,trail:.,extends:>,precedes:<
+  let &showbreak = '^'
+endif
+
 set makeprg="make -j4"
 set matchtime=0  " disable nvim matchparen
 set maxmempattern=1000  " max: 2000000
