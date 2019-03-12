@@ -13,7 +13,14 @@ let s:gopath = expand('$HOME/go') . '/src'
 let s:srcpath = expand('$HOME/Documents/')
 " -------------------------------------------------------------------------------------------------
 " Neovim Configs:
-if has('macunix')
+if has('win32')
+  let g:ruby_host_prog = 'C:/Users/kspark/scoop/apps/ruby/current/gems/bin/neovim-ruby-host.bat'
+  let g:python_host_prog = 'C:/Users/kspark/scoop/shims/python2'
+  let g:python3_host_prog = 'C:/Users/kspark/scoop/shims/python3'
+  let g:loaded_python_provider = 1
+  let s:python2_include_dir = 'C:/Users/kspark/scoop/apps/python27/current/include'
+  let s:python3_include_dir = 'C:/Users/kspark/scoop/apps/python/current/include'
+elseif has('macunix')
   let g:ruby_host_prog = '/usr/local/opt/ruby/bin/ruby'
   let g:python_host_prog = '/usr/local/bin/python2'
   let g:python3_host_prog = '/usr/local/bin/python3'
@@ -201,18 +208,18 @@ endfor
 
 "let g:did_install_default_menus = $VIMRUNTIME/menu.vim
 "let g:did_menu_trans            = 1 " $VIMRUNTIME/menu.vim
-let g:load_doxygen_syntax       = 1 " $VIMRUNTIME/syntax/doxygen.vim
-let g:loaded_2html_plugin       = 1 " $VIMRUNTIME/plugin/tohtml.vim
+"let g:load_doxygen_syntax       = 1 " $VIMRUNTIME/syntax/doxygen.vim
+"let g:loaded_2html_plugin       = 1 " $VIMRUNTIME/plugin/tohtml.vim
 let g:loaded_gzip               = 1 " $VIMRUNTIME/plugin/gzip.vim
-let g:loaded_less               = 1 " $VIMRUNTIME/macros/less.vim
+"let g:loaded_less               = 1 " $VIMRUNTIME/macros/less.vim
 "let g:loaded_matchit            = 1 " $VIMRUNTIME/plugin/matchit.vim
-let g:loaded_matchparen         = 1 " $VIMRUNTIME/plugin/matchparen.vim
+"let g:loaded_matchparen         = 1 " $VIMRUNTIME/plugin/matchparen.vim
 let g:loaded_netrw              = 1 " $VIMRUNTIME/autoload/netrw.vim
 let g:loaded_netrwFileHandlers  = 1 " $VIMRUNTIME/autoload/netrwFileHandlers.vim
 let g:loaded_netrwPlugin        = 1 " $VIMRUNTIME/plugin/netrwPlugin.vim
 let g:loaded_netrwSettings      = 1 " $VIMRUNTIME/autoload/netrwSettings.vim
 let g:loaded_rrhelper           = 1 " $VIMRUNTIME/plugin/rrhelper.vim
-let g:loaded_spellfile_plugin   = 1 " $VIMRUNTIME/plugin/spellfile.vim
+"let g:loaded_spellfile_plugin   = 1 " $VIMRUNTIME/plugin/spellfile.vim
 let g:loaded_sql_completion     = 1 " $VIMRUNTIME/autoload/sqlcomplete.vim
 let g:loaded_syntax_completion  = 1 " $VIMRUNTIME/autoload/syntaxcomplete.vim
 let g:loaded_tar                = 1 " $VIMRUNTIME/autoload/tar.vim
@@ -268,8 +275,8 @@ if dein#load_state(s:dein_cache_dir)
     call dein#add('roxma/nvim-yarp')
     call dein#add('roxma/vim-hug-neovim-rpc')
   endif
-call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) 
-call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })  
+  call dein#add('junegunn/fzf', { 'build': './install --all', 'merged': 0 }) 
+  call dein#add('junegunn/fzf.vim', { 'depends': 'fzf' })  
   call dein#add('Shougo/neco-vim', { 'on_ft': ['vim'] })
   "  call dein#add('LuXuryPro/deoplete-rtags', { 'on_ft': ['c', 'cpp', 'objc', 'objcpp'] })
   call dein#add('Shougo/neosnippet-snippets')
@@ -782,9 +789,12 @@ Gautocmdft yaml call deoplete#custom#source('LanguageClient', 'min_pattern_lengt
 if isdirectory("/usr/local/opt/llvm/lib")
   let s:llvm_library_path = '/usr/local/opt/llvm/lib'
   let s:llvm_clang_version = '7.0.1'
-elseif ("/usr/lib/clang")
+elseif isdirectory("/usr/lib/clang")
   let s:llvm_library_path = '/usr/lib/clang'
   let s:llvm_clang_version = '8.0.0'
+elseif isdirectory("C:/Users/kspark/scoop/apps/llvm/current/lib")
+  let s:llvm_library_path = 'C:/Users/kspark/scoop/apps/llvm/current/lib'
+  let s:llvm_clang_version = '7.0.1'
 else
   let s:llvm_library_path = '/Library/Developer/CommandLineTools/usr/lib'
   let s:llvm_clang_version = '10.0.0'
@@ -893,6 +903,11 @@ elseif has('unix')
         \ '-use-dbg-addr',
         \ '-view-background',
         \ ] 
+elseif has('win32')
+  let s:LanguageClient_serverCommands_c = [
+        \ 'clangd.exe',
+        \'-j=4',
+        \]
 endif
 let g:LanguageClient_serverCommands = {
       \ 'c': s:LanguageClient_serverCommands_c,
@@ -996,10 +1011,10 @@ let g:ale_lint_on_insert_leave = 0
 let g:ale_lint_on_save = 1
 let g:ale_lint_on_text_changed = 'never'
 let g:ale_list_window_size = 10
-let g:ale_open_list = 0
+let g:ale_open_list = 1
 let g:ale_set_highlights = 0
 let g:ale_set_loclist = 0
-let g:ale_set_quickfix = 0
+let g:ale_set_quickfix = 1
 let g:ale_sign_column_always = 1
 let g:ale_use_global_executables = 1
 let g:ale_virtualtext_cursor = 1
