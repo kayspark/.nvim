@@ -366,7 +366,7 @@ if dein#load_state(s:dein_cache_dir)
 
   " Lifelog:
   "  call dein#add('wakatime/vim-wakatime')
-
+  call dein#add('davidoc/taskpaper.vim')
   " -------
   " Language Plugin:
 
@@ -795,13 +795,13 @@ Gautocmdft yaml call deoplete#custom#source('LanguageClient', 'min_pattern_lengt
 " LLVM library path
 if isdirectory("/usr/local/opt/llvm/lib")
   let s:llvm_library_path = '/usr/local/opt/llvm/lib'
-  let s:llvm_clang_version = '7.0.1'
+  let s:llvm_clang_version = '8.0.0'
 elseif isdirectory("/usr/lib/clang")
   let s:llvm_library_path = '/usr/lib/clang'
   let s:llvm_clang_version = '8.0.0'
 elseif isdirectory("C:/Users/kspark/scoop/apps/llvm/current/lib")
   let s:llvm_library_path = 'C:/Users/kspark/scoop/apps/llvm/current/lib'
-  let s:llvm_clang_version = '7.0.1'
+  let s:llvm_clang_version = '8.0.0'
 else
   let s:llvm_library_path = '/Library/Developer/CommandLineTools/usr/lib'
   let s:llvm_clang_version = '10.0.0'
@@ -887,35 +887,29 @@ let g:LanguageClient_selectionUI = 'fzf'  " fzf, quickfix, location-list
 let g:LanguageClient_settingsPath = '.lsp.json'
 let g:LanguageClient_windowLogMessageLevel = "Warning"  " Error, default: Warning, Info, Log
 if has('mac')
-  let s:LanguageClient_serverCommands_c = [
-        \ 'clangd',
-        \'-j=12',
-        \]
+  let s:clangd = 'clangd'
 elseif has('unix')
-  let s:LanguageClient_serverCommands_c = [
-        \ 'clangd-8',
-        \ '-all-scopes-completion',
-        \ '-background-index',
-        \ '-compile-commands-dir=build',
-        \ '-compile_args_from=filesystem',
-        \ '-completion-style=detailed',
-        \ '-function-arg-placeholders',
-        \ '-header-insertion-decorators',
-        \ '-include-ineligible-results',
-        \ '-input-style=standard',
-        \ '-j=12',
-        \ '-pch-storage=disk',
-        \ '-resource-dir=/usr/lib/clang/8.0.0/include',
-        \ '-static-func-full-module-prefix',
-        \ '-use-dbg-addr',
-        \ '-view-background',
-        \ ] 
+  let s:clangd ='clangd-8'
 elseif has('win32')
-  let s:LanguageClient_serverCommands_c = [
-        \ 'clangd.exe',
-        \'-j=4',
-        \]
+  let s:clangd = 'clangd.exe'
 endif
+let s:LanguageClient_serverCommands_c = [
+      \ s:clangd,
+      \ '-all-scopes-completion',
+      \ '-background-index',
+      \ '-compile-commands-dir=build',
+      \ '-compile_args_from=filesystem',
+      \ '-completion-style=detailed',
+      \ '-function-arg-placeholders',
+      \ '-header-insertion-decorators',
+      \ '-include-ineligible-results',
+      \ '-input-style=standard',
+      \ '-j=12',
+      \ '-pch-storage=disk',
+      \ '-static-func-full-module-prefix',
+      \ '-use-dbg-addr',
+      \ '-view-background',
+      \]
 let g:LanguageClient_serverCommands = {
       \ 'c': s:LanguageClient_serverCommands_c,
       \ 'cpp': s:LanguageClient_serverCommands_c,
