@@ -628,16 +628,42 @@ function! s:languageclient_setup()
     " languageclient : key mapping:
     " nnoremap  <silent>gm          :<C-u>call LanguageClient_contextMenuItems()<CR>
     " nnoremap  <silent>gx          :<C-u>call LanguageClient_textDocument_codeAction()<CR>
-    nnoremap  <silent><C-/>      :<C-u>call LanguageClient_textDocument_references()<CR>
-    nnoremap  <silent><C-{>       :<C-u>call LanguageClient_textDocument_definition()<CR>
-    nnoremap  <silent><C-}>       :<C-u>call LanguageClient_textDocument_implementation()<CR>
+    nnoremap  <silent><C-m>       :<C-u>call LanguageClient_textDocument_references()<CR>
+    nnoremap  <silent><C-]>       :<C-u>call LanguageClient_textDocument_definition()<CR>
+    nnoremap  <silent><C-[>       :<C-u>call LanguageClient_textDocument_implementation()<CR>
     nnoremap  <silent><C-h>       :<C-u>call LanguageClient_textDocument_hover()<CR>
     " Rename - rn => rename
-    noremap <leader>f           :<C-u>call LanguageClient#textDocument_formatting()<CR>
-    noremap <leader>e           :<C-u>call LanguageClient#textDocument_rename()<CR>
+    noremap <leader>f             :<C-u>call LanguageClient#textDocument_formatting()<CR>
+    noremap <leader>e             :<C-u>call LanguageClient#textDocument_rename()<CR>
     "  noremap <leader>h :call LanguageClient#textDocument_documentHighlight()<CR>
     "  noremap <leader>nh :call LanguageClient#clearDocumentHighlight()<CR>
     noremap <leader>m              :<C-u>call LanguageClient_contextMenu()<CR>
+    nn <silent> <C-h>              :<C-u>call LanguageClient#findLocations({'method':'$ccls/navigate','direction':'L'})<CR>
+    nn <silent> <C-j>              :<C-u> call LanguageClient#findLocations({'method':'$ccls/navigate','direction':'D'})<CR>
+    nn <silent> <C-k>              :<C-u> call LanguageClient#findLocations({'method':'$ccls/navigate','direction':'U'})<CR>
+    nn <silent> <C-l>               :<C-u> call LanguageClient#findLocations({'method':'$ccls/navigate','direction':'R'})<CR>
+
+" bases
+"    nn <silent> <C-b> :call LanguageClient#findLocations({'method':'$ccls/inheritance'})<CR>
+    " bases of up to 3 levels
+"    nn <silent> <C-B> :call LanguageClient#findLocations({'method':'$ccls/inheritance','levels':3})<CR>
+    " derived
+"    nn <silent> <C-d> :call LanguageClient#findLocations({'method':'$ccls/inheritance','derived':v:true})<cr>
+    " derived of up to 3 levels
+"    nn <silent> <C-D> :call LanguageClient#findLocations({'method':'$ccls/inheritance','derived':v:true,'levels':3})<cr>
+    
+    " caller
+    nn <silent> <C-c> :call LanguageClient#findLocations({'method':'$ccls/call'})<cr>
+    " callee
+    nn <silent> <C-C> :call LanguageClient#findLocations({'method':'$ccls/call','callee':v:true})<cr>
+    
+    " $ccls/member
+    " nested classes / types in a namespace
+    nn <silent> <C-s> :call LanguageClient#findLocations({'method':'$ccls/member','kind':2})<cr>
+    " member functions / functions in a namespace
+    nn <silent> <C-m> :call LanguageClient#findLocations({'method':'$ccls/member','kind':3})<cr>
+    " member variables / variables in a namespace
+    nn <silent> <C-v> :call LanguageClient#findLocations({'method':'$ccls/member'})<cr>
   endif
 endfunction
 
@@ -884,7 +910,7 @@ let g:LanguageClient_hasSnippetSupport = 0
 let g:LanguageClient_hoverPreview = 'Auto'  " Always, Auto, Never
 let g:LanguageClient_loadSettings = 1
 let g:LanguageClient_selectionUI = 'fzf'  " fzf, quickfix, location-list
-let g:LanguageClient_settingsPath = '.lsp.json'
+let g:LanguageClient_settingsPath = $XDG_CONFIG_DIRS . '/nvim/settings.json'
 let g:LanguageClient_windowLogMessageLevel = "Warning"  " Error, default: Warning, Info, Log
 if has('mac')
   let s:clangd = 'clangd'
@@ -911,8 +937,10 @@ let s:LanguageClient_serverCommands_c = [
       \ '-view-background',
       \]
 let g:LanguageClient_serverCommands = {
-      \ 'c': s:LanguageClient_serverCommands_c,
-      \ 'cpp': s:LanguageClient_serverCommands_c,
+      \ 'c': ['ccls'],
+      \ 'cpp': ['ccls'],
+      \ 'cuda': ['ccls'],
+      \ 'objc': ['ccls'],
       \ 'sh': ['bash-language-server', 'start'],
       \ 'typescript': ['javascript-typescript-stdio'],
       \ 'zsh': ['bash-language-server', 'start'],
