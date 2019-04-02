@@ -628,7 +628,7 @@ function! s:languageclient_setup()
     " languageclient : key mapping:
     " nnoremap  <silent>gm          :<C-u>call LanguageClient_contextMenuItems()<CR>
     " nnoremap  <silent>gx          :<C-u>call LanguageClient_textDocument_codeAction()<CR>
-    nnoremap  <silent><C-m>       :<C-u>call LanguageClient_textDocument_references()<CR>
+    nnoremap  <silent><C-m>       :<C-u>call LanguageClient_textDocument_references({'includeDeclaration': v:false})<CR>
     nnoremap  <silent><C-]>       :<C-u>call LanguageClient_textDocument_definition()<CR>
     nnoremap  <silent><C-[>       :<C-u>call LanguageClient_textDocument_implementation()<CR>
     nnoremap  <silent><C-h>       :<C-u>call LanguageClient_textDocument_hover()<CR>
