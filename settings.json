@@ -1,0 +1,10 @@
+{
+    "initializationOptions": {
+    "cache": {
+      "directory": "/tmp/ccls"
+    },
+    "clang": {
+      "resourceDir": "//usr/local/opt/llvm/lib/clang/8.0.0/include"
+    }
+  }
+}
